@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>io.github.hinaser.gfm-advanced</id>
+    <name>GfmA</name>
+    <vendor email="rindo.hinase@gmail.com" url="https://github.com/Hinaser">Hinaser</vendor>
+
+    <description><![CDATA[
+    <p>Github Flavored Markdown Editor plugin for intellij platform</p>
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileEditorProvider implementation="io.github.hinaser.gfma.editor.GfmAProvider" />
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
