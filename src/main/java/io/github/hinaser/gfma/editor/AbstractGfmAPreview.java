@@ -14,6 +14,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import io.github.hinaser.gfma.markdown.MarkdownParsedListener;
 import io.github.hinaser.gfma.markdown.MarkdownParser;
 import io.github.hinaser.gfma.markdown.ThrottlePoolExecutor;
+import io.github.hinaser.gfma.template.MarkdownTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,11 +41,11 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     }
 
     public void queueMarkdownToHtmlTask(String markdown) {
-        throttlePoolExecutor.queue(getMarkdownWorker(markdown));
+        throttlePoolExecutor.queue(getMarkdownWorker(markdownFile.getName(), markdown));
     }
 
     public void queueMarkdownToHtmlTask(String markdown, long timeout) {
-        throttlePoolExecutor.queue(getMarkdownWorker(markdown), timeout);
+        throttlePoolExecutor.queue(getMarkdownWorker(markdownFile.getName(), markdown), timeout);
     }
 
     protected class DocumentChangeListener implements DocumentListener {
@@ -67,22 +68,27 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
         }
     }
 
-    protected MarkdownWorker getMarkdownWorker(String markdown) {
-        return new MarkdownWorker(markdown);
+    protected MarkdownWorker getMarkdownWorker(String filename, String markdown) {
+        return new MarkdownWorker(filename, markdown);
     }
 
     protected class MarkdownWorker implements Runnable {
+        protected String filename;
         protected String markdown;
         protected MarkdownParsedListener listener;
 
-        public MarkdownWorker(String markdown) {
+        public MarkdownWorker(String filename, String markdown) {
+            this.filename = filename;
             this.markdown = markdown;
             this.listener = getMarkdownParsedListener();
         }
 
         @Override
         public void run() {
-            listener.onMarkdownParseDone(markdownParser.markdownToHtml(markdown));
+            var html = markdownParser.markdownToHtml(markdown);
+            var template = MarkdownTemplate.getInstance();
+            var appliedHtml = template.getGithubFlavoredHtml(filename, html);
+            listener.onMarkdownParseDone(appliedHtml);
         }
     }
 

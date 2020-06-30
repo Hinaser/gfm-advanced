@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet"
+          href="{github.css}"/>
+    <link rel="stylesheet"
+          href="{github2.css}"/>
+    <style id="css-fixes">
+        .repository-with-sidebar .repository-content {
+            float: left;
+        }
+        #readme {
+        width: {width};
+        }
+        .container{
+            margin:0px;
+            margin-right:0px;
+            margin-left:0px;
+        width: {width};
+        }
+        html{
+            margin: 20px;
+        }
+        body{
+        min-width: 0px;
+        width: 100%
+        }
+        .repository-with-sidebar.with-full-navigation .repository-content {
+        width: {width};
+        }
+        {additionalCss}
+    </style>
+    <link rel="stylesheet"
+          href="{highlight.github.css}"/>
+    <script src="{highlight.pack.js}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div class="page">
+    <div class="preview-page">
+        <div class="container">
+            <div class="repository-with-sidebar repo-container with-full-navigation">
+                <div class="repository-content context-loader-container">
+                    <div id="readme" class="readme boxed-group clearfix announce instapaper_body md">
+                        <h3>
+                            <svg aria-hidden="true" class="octicon octicon-book" height="16" version="1.1"
+                                 viewBox="0 0 16 16" width="16">
+                                <path d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path>
+                            </svg>
+                            <span id="title">{0}</span>
+                        </h3>
+
+                        <article class="markdown-body entry-content" itemprop="text">
+                            {1}
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>&nbsp;</div>
+</div>
+</body>
+</html>
