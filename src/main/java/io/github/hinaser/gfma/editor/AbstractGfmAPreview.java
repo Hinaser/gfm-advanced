@@ -31,8 +31,11 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     public AbstractGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document) {
         this.markdownFile = markdownFile;
         this.document = document;
-        this.markdownParser = MarkdownParser.createMarkdownParser(getMarkdownParsedListener());
 
+        String parentFolderPath = markdownFile.getParent().getCanonicalPath();
+        this.markdownParser = MarkdownParser.createMarkdownParser(parentFolderPath, getMarkdownParsedListener());
+
+        // Update markdown html every time when document changes.
         // this.document.addDocumentListener(new DocumentChangeListener());
     }
 
