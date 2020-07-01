@@ -51,11 +51,20 @@ public class Configurable implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return appSettings.isUseFullWidthRendering() != appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected();
+        return appSettings.getConnectionTimeout() != (Integer)appSettingsComponent.getConnectionTimeoutSpinner().getValue() ||
+                appSettings.getSocketTimeout() != (Integer)appSettingsComponent.getSocketTimeoutSpinner().getValue() ||
+                !appSettings.getGithubAccessToken().equals(String.valueOf(appSettingsComponent.getGithubAccessTokenField().getPassword())) ||
+                appSettings.isUseGithubMarkdownAPI() != appSettingsComponent.getUseGithubMarkdownAPICheckBox().isSelected() ||
+                appSettings.isUseFullWidthRendering() != appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected()
+            ;
     }
 
     @Override
     public void apply() throws ConfigurationException {
+        appSettings.setGithubAccessToken(String.valueOf(appSettingsComponent.getGithubAccessTokenField().getPassword()));//todo not secure
+        appSettings.setConnectionTimeout((Integer) appSettingsComponent.getConnectionTimeoutSpinner().getValue());
+        appSettings.setSocketTimeout((Integer) appSettingsComponent.getSocketTimeoutSpinner().getValue());
+        appSettings.setUseGithubMarkdownAPI(appSettingsComponent.getUseGithubMarkdownAPICheckBox().isSelected());
         appSettings.setUseFullWidthRendering(appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected());
     }
 
@@ -67,6 +76,10 @@ public class Configurable implements SearchableConfigurable {
                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
                     @Override
                     public void run() {
+                        appSettingsComponent.getGithubAccessTokenField().setText(appSettings.getGithubAccessToken());
+                        appSettingsComponent.getConnectionTimeoutSpinner().setValue(appSettings.getConnectionTimeout());
+                        appSettingsComponent.getSocketTimeoutSpinner().setValue(appSettings.getSocketTimeout());
+                        appSettingsComponent.getUseGithubMarkdownAPICheckBox().setSelected(appSettings.isUseGithubMarkdownAPI());
                         appSettingsComponent.getUseFullWidthRenderingCheckBox().setSelected(appSettings.isUseFullWidthRendering());
                     }
                 });

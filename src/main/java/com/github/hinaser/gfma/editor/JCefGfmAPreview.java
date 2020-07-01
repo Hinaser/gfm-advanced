@@ -36,8 +36,8 @@ public class JCefGfmAPreview extends AbstractGfmAPreview {
         }
 
         @Override
-        public void onMarkdownParseFailed(String error) {
-
+        public void onMarkdownParseFailed(String errorHtml) {
+            browser.loadContent(errorHtml);
         }
     }
 }

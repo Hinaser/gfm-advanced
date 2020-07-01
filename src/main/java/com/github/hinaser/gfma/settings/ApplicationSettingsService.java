@@ -17,13 +17,65 @@ import java.util.Set;
         storages = @Storage("gfma.xml")
 )
 public class ApplicationSettingsService implements PersistentStateComponent<Element> {
+    private static final String USE_GITHUB_MARKDOWN_API = "useGithubMarkdownAPI";
+    private static final String GITHUB_ACCESS_TOKEN = "githubAccessToken";
+    private static final String CONNECTION_TIMEOUT = "connectionTimeout";
+    private static final String SOCKET_TIMEOUT = "socketTimeout";
     private static final String USE_FULL_WIDTH_RENDERING = "useFullWidthRendering";
 
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
+    private boolean useGithubMarkdownAPI = false;
+    private String githubAccessToken = "";
+    private int connectionTimeout = 2000;
+    private int socketTimeout = 2000;
     private boolean useFullWidthRendering = false;
 
     public static ApplicationSettingsService getInstance() {
         return ServiceManager.getService(ApplicationSettingsService.class);
+    }
+
+    public void setUseGithubMarkdownAPI(boolean useGithubMarkdownAPI) {
+        if (this.useGithubMarkdownAPI != useGithubMarkdownAPI) {
+            this.useGithubMarkdownAPI = useGithubMarkdownAPI;
+            notifyListeners();
+        }
+    }
+
+    public boolean isUseGithubMarkdownAPI() {
+        return useGithubMarkdownAPI;
+    }
+
+    public String getGithubAccessToken() {
+        return githubAccessToken;
+    }
+
+    public void setGithubAccessToken(String githubAccessToken) {
+        if (!this.githubAccessToken.equals(githubAccessToken)) {
+            this.githubAccessToken = githubAccessToken;
+            notifyListeners();
+        }
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        if (this.connectionTimeout != connectionTimeout) {
+            this.connectionTimeout = connectionTimeout;
+            notifyListeners();
+        }
+    }
+
+    public int getSocketTimeout() {
+        return socketTimeout;
+    }
+
+    public void setSocketTimeout(int socketTimeout) {
+        if (this.socketTimeout != socketTimeout) {
+            this.socketTimeout = socketTimeout;
+            notifyListeners();
+        }
     }
 
     public boolean isUseFullWidthRendering() {
@@ -49,12 +101,32 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     @Override
     public Element getState() {
         Element element = new Element("GfmASettings");
+        element.setAttribute(USE_GITHUB_MARKDOWN_API, String.valueOf(useGithubMarkdownAPI));
+        element.setAttribute(GITHUB_ACCESS_TOKEN, githubAccessToken);
+        element.setAttribute(CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
+        element.setAttribute(SOCKET_TIMEOUT, String.valueOf(socketTimeout));
         element.setAttribute(USE_FULL_WIDTH_RENDERING, String.valueOf(useFullWidthRendering));
         return element;
     }
 
     @Override
     public void loadState(Element state) {
+        String githubAccessToken = state.getAttributeValue(GITHUB_ACCESS_TOKEN);
+        if (githubAccessToken != null) {
+            setGithubAccessToken(githubAccessToken);
+        }
+        String connectionTimeout = state.getAttributeValue(CONNECTION_TIMEOUT);
+        if (connectionTimeout != null) {
+            setConnectionTimeout(Integer.parseInt(connectionTimeout));
+        }
+        String socketTimeout = state.getAttributeValue(SOCKET_TIMEOUT);
+        if (socketTimeout != null) {
+            setSocketTimeout(Integer.parseInt(socketTimeout));
+        }
+        String useGithubMarkdownAPI = state.getAttributeValue(USE_GITHUB_MARKDOWN_API);
+        if (useGithubMarkdownAPI != null) {
+            setUseGithubMarkdownAPI(Boolean.parseBoolean(useGithubMarkdownAPI));
+        }
         String useFullWidthRendering = state.getAttributeValue(USE_FULL_WIDTH_RENDERING);
         if (useFullWidthRendering != null) {
             setUseFullWidthRendering(Boolean.parseBoolean(useFullWidthRendering));

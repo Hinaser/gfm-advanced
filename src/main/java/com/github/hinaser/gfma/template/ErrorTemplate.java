@@ -10,7 +10,7 @@ public class ErrorTemplate extends AbstractTemplate {
         loadTemplate(Resource.MARKDOWN_ERROR);
     }
 
-    public ErrorTemplate getInstance() {
+    public static ErrorTemplate getInstance() {
         return Singleton.INSTANCE;
     }
 

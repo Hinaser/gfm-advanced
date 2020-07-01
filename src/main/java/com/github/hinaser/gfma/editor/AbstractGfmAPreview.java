@@ -1,11 +1,12 @@
 package com.github.hinaser.gfma.editor;
 
+import com.github.hinaser.gfma.browser.IBrowser;
+import com.github.hinaser.gfma.markdown.*;
 import com.github.hinaser.gfma.settings.ApplicationSettingsChangedListener;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
-import com.github.hinaser.gfma.browser.IBrowser;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -13,10 +14,6 @@ import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.github.hinaser.gfma.markdown.MarkdownParsedListener;
-import com.github.hinaser.gfma.markdown.MarkdownParser;
-import com.github.hinaser.gfma.markdown.ThrottlePoolExecutor;
-import com.github.hinaser.gfma.template.MarkdownTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,25 +22,31 @@ import java.beans.PropertyChangeListener;
 
 public abstract class AbstractGfmAPreview extends UserDataHolderBase implements Disposable, FileEditor {
     protected final VirtualFile markdownFile;
-    protected final ApplicationSettingsService appSettingsService;
+    protected final ApplicationSettingsService appSettings;
 
     protected Document document;
     protected IBrowser browser;
-    protected MarkdownParser markdownParser;
+    protected AbstractMarkdownParser markdownParser;
     protected ThrottlePoolExecutor throttlePoolExecutor = new ThrottlePoolExecutor(200);
     protected boolean isModifiedAndNotRendered = true;
 
     public AbstractGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document) {
         this.markdownFile = markdownFile;
         this.document = document;
-        this.appSettingsService = ApplicationSettingsService.getInstance();
-
-        String parentFolderPath = markdownFile.getParent().getCanonicalPath();
-        this.markdownParser = MarkdownParser.createMarkdownParser(parentFolderPath, getMarkdownParsedListener());
-
+        this.appSettings = ApplicationSettingsService.getInstance();
+        updateMarkdownParser(this.appSettings);
         this.document.addDocumentListener(new DocumentChangeListener());
+        this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
+    }
 
-        this.appSettingsService.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
+    public void updateMarkdownParser(ApplicationSettingsService settings) {
+        String parentFolderPath = markdownFile.getParent().getCanonicalPath();
+        if(settings.isUseGithubMarkdownAPI()){
+            this.markdownParser = GithubAPIMarkdownParser.getInstance(parentFolderPath, getMarkdownParsedListener());
+        }
+        else{
+            this.markdownParser = FlexmarkMarkdownParser.getInstance(parentFolderPath, getMarkdownParsedListener());
+        }
     }
 
     public void updatePreview() {
@@ -52,11 +55,11 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     }
 
     public void queueMarkdownToHtmlTask(String markdown) {
-        throttlePoolExecutor.queue(getMarkdownWorker(markdownFile.getName(), markdown));
+        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdownFile.getName(), markdown));
     }
 
     public void queueMarkdownToHtmlTask(String markdown, long timeout) {
-        throttlePoolExecutor.queue(getMarkdownWorker(markdownFile.getName(), markdown), timeout);
+        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdownFile.getName(), markdown), timeout);
     }
 
     protected class DocumentChangeListener implements DocumentListener {
@@ -66,33 +69,10 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
         }
     }
 
-    protected MarkdownWorker getMarkdownWorker(String filename, String markdown) {
-        return new MarkdownWorker(filename, markdown);
-    }
-
-    protected class MarkdownWorker implements Runnable {
-        protected String filename;
-        protected String markdown;
-        protected MarkdownParsedListener listener;
-
-        public MarkdownWorker(String filename, String markdown) {
-            this.filename = filename;
-            this.markdown = markdown;
-            this.listener = getMarkdownParsedListener();
-        }
-
-        @Override
-        public void run() {
-            var html = markdownParser.markdownToHtml(markdown);
-            var template = MarkdownTemplate.getInstance();
-            var appliedHtml = template.getGithubFlavoredHtml(filename, html);
-            listener.onMarkdownParseDone(appliedHtml);
-        }
-    }
-
     protected class SettingsChangeListener implements ApplicationSettingsChangedListener {
         @Override
         public void onApplicationSettingsChanged(ApplicationSettingsService newApplicationSettings) {
+            updateMarkdownParser(newApplicationSettings);
             updatePreview();
         }
     }
