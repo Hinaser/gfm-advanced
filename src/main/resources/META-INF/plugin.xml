@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>io.github.hinaser.gfm-advanced</id>
+    <id>com.github.hinaser.gfm-advanced</id>
     <name>GfmA</name>
     <vendor email="rindo.hinase@gmail.com" url="https://github.com/Hinaser">Hinaser</vendor>
 
@@ -12,7 +12,9 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileEditorProvider implementation="io.github.hinaser.gfma.editor.GfmAProvider" />
+        <fileEditorProvider implementation="com.github.hinaser.gfma.editor.GfmAProvider" />
+        <applicationConfigurable instance="com.github.hinaser.gfma.settings.Configurable" />
+        <applicationService serviceImplementation="com.github.hinaser.gfma.settings.ApplicationSettingsService" />
     </extensions>
 
     <actions>
