@@ -5,7 +5,10 @@ import com.github.hinaser.gfma.settings.ApplicationSettingsService;
 import com.github.hinaser.gfma.template.ErrorTemplate;
 import com.github.hinaser.gfma.template.MarkdownTemplate;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -17,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +29,8 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     private final CloseableHttpClient httpClient;
     private final ApplicationSettingsService appSettings;
     protected String parentFolderPath; // Path to the folder which has the parsing markdown file.
+    protected Integer xRateLimitLimit = null;
+    protected Integer xRateLimitRemaining = null;
 
     protected GithubAPIMarkdownParser(String parentFolderPath, MarkdownParsedListener listener) {
         super(listener);
@@ -55,8 +61,8 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
         private String adjustLocalImagePathRelativeToMarkdownPath(String html) {
             Matcher matcher = IMG_PATTERN.matcher(markdown);
             while (matcher.find()) {
-                var src = matcher.group(2);
-                if(!src.isBlank()){
+                String src = matcher.group(2);
+                if(!src.isEmpty()){
                     html = html.replaceAll("href=[\"']" + src + "[\"']", "onclick=\"false\"");
                     html = html.replaceAll("src=[\"']" + src + "[\"']", "src=\"" + appendParentPath(parentFolderPath, src) + "\"");
                 }
@@ -90,19 +96,34 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
             httpPost.setEntity(stringEntity);
             httpPost.setConfig(requestConfig);
 
+            String authToken = appSettings.getGithubAccessToken();
+            if(!authToken.isEmpty()){
+                httpPost.addHeader(HttpHeaders.AUTHORIZATION, authToken);
+            }
+
             return httpPost;
         }
 
         private void reportSuccess(String html) {
-            var adjustedHtml = adjustLocalImagePathRelativeToMarkdownPath(html);
-            var template = MarkdownTemplate.getInstance();
-            var appliedHtml = template.getGithubFlavoredHtml(filename, adjustedHtml);
+            String adjustedHtml = adjustLocalImagePathRelativeToMarkdownPath(html);
+            MarkdownTemplate template = MarkdownTemplate.getInstance();
+            String appliedHtml = template.getGithubFlavoredHtml(filename, adjustedHtml);
             markdownParsedListener.onMarkdownParseDone(appliedHtml);
         }
 
         private void reportError(String errMsg, String stackTrace) {
-            var template = ErrorTemplate.getInstance();
+            ErrorTemplate template = ErrorTemplate.getInstance();
             markdownParsedListener.onMarkdownParseFailed(template.getErrorHtml(errMsg, stackTrace));
+        }
+
+        private String getHeaderValue(CloseableHttpResponse response, String name) {
+            Header header = response.getFirstHeader(name);
+            if(header == null){
+                return "";
+            }
+
+            String value = header.getValue();
+            return value == null ? "" : value;
         }
 
         @Override
@@ -116,7 +137,17 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 HttpEntity entity = response.getEntity();
                 String responseString = EntityUtils.toString(entity);
 
-                var statusCode = response.getStatusLine().getStatusCode();
+                try {
+                    xRateLimitLimit = Integer.parseInt(getHeaderValue(response, "X-RateLimit-Limit"));
+                }
+                catch(NumberFormatException ignored){ }
+
+                try {
+                    xRateLimitRemaining = Integer.parseInt(getHeaderValue(response, "X-RateLimit-Remaining"));
+                }
+                catch(NumberFormatException ignored){ }
+
+                int statusCode = response.getStatusLine().getStatusCode();
                 if(statusCode == 200) {
                     reportSuccess(responseString);
                 }

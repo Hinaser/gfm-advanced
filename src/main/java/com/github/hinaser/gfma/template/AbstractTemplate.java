@@ -14,7 +14,7 @@ public abstract class AbstractTemplate {
     protected abstract void initializeTemplate();
 
     protected void loadTemplate(Resource r) {
-        var resource = r.getResource();
+        String resource = r.getResource();
         InputStreamReader inputStreamReader = new InputStreamReader(getClass().getResourceAsStream(resource));
         StringBuilder stringBuilder = new StringBuilder();
         try {

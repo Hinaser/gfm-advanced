@@ -81,14 +81,14 @@ public class FlexmarkMarkdownParser extends AbstractMarkdownParser {
         @Override
         public void run() {
             try {
-                var html = markdownToHtml(markdown);
-                var template = MarkdownTemplate.getInstance();
-                var appliedHtml = template.getGithubFlavoredHtml(filename, html);
+                String html = markdownToHtml(markdown);
+                MarkdownTemplate template = MarkdownTemplate.getInstance();
+                String appliedHtml = template.getGithubFlavoredHtml(filename, html);
                 markdownParsedListener.onMarkdownParseDone(appliedHtml);
             }
             catch(Exception e) {
-                var template = ErrorTemplate.getInstance();
-                var errorHtml = template.getErrorHtml(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
+                ErrorTemplate template = ErrorTemplate.getInstance();
+                String errorHtml = template.getErrorHtml(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
                 markdownParsedListener.onMarkdownParseFailed(errorHtml);
             }
         }

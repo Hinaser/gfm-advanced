@@ -6,11 +6,6 @@ import javax.swing.*;
 
 public class ApplicationSettingsComponent implements Disposable {
     private JPanel panel;
-    private JLabel useGithubAPILabel;
-    private JLabel connectionTimeoutLabel;
-    private JLabel socketTimeoutLabel;
-    private JLabel useFullWidthRenderingLabel;
-    private JLabel githubAccessTokenLabel;
     private JCheckBox useGithubMarkdownAPICheckBox;
     private JPasswordField githubAccessTokenField;
     private JSpinner connectionTimeoutSpinner;

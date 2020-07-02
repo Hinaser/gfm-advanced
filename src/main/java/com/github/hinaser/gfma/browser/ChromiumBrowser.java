@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 public class ChromiumBrowser implements IBrowser, Disposable {
@@ -121,7 +122,7 @@ public class ChromiumBrowser implements IBrowser, Disposable {
         final Long lIndex = ThreadLocalRandom.current().nextLong();
         final Function<String, Response> handler = (result) -> {
             callback.apply(result);
-            var savedHandler = queryHandlers.get(lIndex);
+            Function<String, Response> savedHandler = queryHandlers.get(lIndex);
             jsQuery.removeHandler(savedHandler);
             queryHandlers.remove(lIndex);
             return null;
@@ -168,24 +169,24 @@ public class ChromiumBrowser implements IBrowser, Disposable {
 
     @Override
     public void getHtmlAsync(@NotNull Function<String, Void> onGetHtml) {
-        final var browser = getBrowser();
+        final CefBrowser browser = getBrowser();
         if(browser.isLoading()){
             onGetHtml.apply("");
             return;
         }
 
-        var updated = new Object(){ boolean value = false; };
-        var t = new Thread(new Runnable() {
+        AtomicBoolean updated = new AtomicBoolean(false);
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 browser.getSource(new CefStringVisitor() {
                     @Override
                     public void visit(String s) {
-                        if(updated.value){
+                        if(updated.get()){
                             return;
                         }
                         onGetHtml.apply(s);
-                        updated.value = true;
+                        updated.set(true);
                     }
                 });
             }
