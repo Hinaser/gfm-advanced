@@ -6,7 +6,6 @@ import com.github.hinaser.gfma.template.ErrorTemplate;
 import com.github.hinaser.gfma.template.MarkdownTemplate;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.Header;
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.config.RequestConfig;
@@ -20,7 +19,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +30,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     protected String parentFolderPath; // Path to the folder which has the parsing markdown file.
     protected Integer xRateLimitLimit = null;
     protected Integer xRateLimitRemaining = null;
+    protected Date xRateLimitReset = null;
 
     protected GithubAPIMarkdownParser(String parentFolderPath, MarkdownParsedListener listener) {
         super(listener);
@@ -146,6 +146,11 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                     xRateLimitRemaining = Integer.parseInt(getHeaderValue(response, "X-RateLimit-Remaining"));
                 }
                 catch(NumberFormatException ignored){ }
+
+                try {
+                    xRateLimitReset = new Date(Long.parseLong(getHeaderValue(response, "X-RateLimit-Reset")) * 1000);
+                }
+                catch(Exception ignored){ }
 
                 int statusCode = response.getStatusLine().getStatusCode();
                 if(statusCode == 200) {
