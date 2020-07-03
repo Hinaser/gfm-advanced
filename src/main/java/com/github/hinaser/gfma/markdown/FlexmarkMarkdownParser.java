@@ -65,16 +65,14 @@ public class FlexmarkMarkdownParser extends AbstractMarkdownParser {
     }
 
     @Override
-    public MarkdownProcessor getMarkdownProcessor(String filename, String markdown) {
-        return new MarkdownProcessor(filename, markdown);
+    public MarkdownProcessor getMarkdownProcessor(String markdown) {
+        return new MarkdownProcessor(markdown);
     }
 
     private class MarkdownProcessor implements Runnable {
-        private final String filename;
         private final String markdown;
 
-        public MarkdownProcessor(String filename, String markdown) {
-            this.filename = filename;
+        public MarkdownProcessor(String markdown) {
             this.markdown = markdown;
         }
 
@@ -82,14 +80,10 @@ public class FlexmarkMarkdownParser extends AbstractMarkdownParser {
         public void run() {
             try {
                 String html = markdownToHtml(markdown);
-                MarkdownTemplate template = MarkdownTemplate.getInstance();
-                String appliedHtml = template.getGithubFlavoredHtml(filename, html);
-                markdownParsedListener.onMarkdownParseDone(appliedHtml);
+                markdownParsedListener.onMarkdownParseDone(html);
             }
             catch(Exception e) {
-                ErrorTemplate template = ErrorTemplate.getInstance();
-                String errorHtml = template.getErrorHtml(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
-                markdownParsedListener.onMarkdownParseFailed(errorHtml);
+                markdownParsedListener.onMarkdownParseFailed(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
             }
         }
     }

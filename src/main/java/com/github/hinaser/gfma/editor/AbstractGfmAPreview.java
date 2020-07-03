@@ -55,11 +55,11 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     }
 
     public void queueMarkdownToHtmlTask(String markdown) {
-        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdownFile.getName(), markdown));
+        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdown));
     }
 
     public void queueMarkdownToHtmlTask(String markdown, long timeout) {
-        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdownFile.getName(), markdown), timeout);
+        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdown), timeout);
     }
 
     protected class DocumentChangeListener implements DocumentListener {
@@ -122,7 +122,7 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Override

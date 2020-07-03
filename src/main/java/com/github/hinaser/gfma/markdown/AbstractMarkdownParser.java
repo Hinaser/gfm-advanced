@@ -7,5 +7,5 @@ public abstract class AbstractMarkdownParser {
         markdownParsedListener = listener;
     }
 
-    public abstract Runnable getMarkdownProcessor(String filename, String markdown);
+    public abstract Runnable getMarkdownProcessor(String markdown);
 }

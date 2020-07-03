@@ -45,16 +45,14 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     }
 
     @Override
-    public Runnable getMarkdownProcessor(String filename, String markdown) {
-        return new MarkdownProcessor(filename, markdown);
+    public Runnable getMarkdownProcessor(String markdown) {
+        return new MarkdownProcessor(markdown);
     }
 
     private class MarkdownProcessor implements Runnable {
-        private final String filename;
         private final String markdown;
 
-        public MarkdownProcessor(String filename, String markdown) {
-            this.filename = filename;
+        public MarkdownProcessor(String markdown) {
             this.markdown = markdown;
         }
 
@@ -105,15 +103,11 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
         }
 
         private void reportSuccess(String html) {
-            String adjustedHtml = adjustLocalImagePathRelativeToMarkdownPath(html);
-            MarkdownTemplate template = MarkdownTemplate.getInstance();
-            String appliedHtml = template.getGithubFlavoredHtml(filename, adjustedHtml);
-            markdownParsedListener.onMarkdownParseDone(appliedHtml);
+            markdownParsedListener.onMarkdownParseDone(html);
         }
 
         private void reportError(String errMsg, String stackTrace) {
-            ErrorTemplate template = ErrorTemplate.getInstance();
-            markdownParsedListener.onMarkdownParseFailed(template.getErrorHtml(errMsg, stackTrace));
+            markdownParsedListener.onMarkdownParseFailed(errMsg, stackTrace);
         }
 
         private String getHeaderValue(CloseableHttpResponse response, String name) {

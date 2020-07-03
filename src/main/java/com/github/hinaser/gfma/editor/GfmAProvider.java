@@ -12,11 +12,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class GfmAProvider implements FileEditorProvider {
     private static final String EDITOR_TYPE_ID = GfmABundle.message("gfmA.editor.type");
-    private static final boolean isJCEFSupported = JBCefApp.isSupported();
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        if(!isJCEFSupported){
+        try {
+            if(!JBCefApp.isSupported()){
+                return false;
+            }
+        }
+        catch(Exception e){
             return false;
         }
         String extension = virtualFile.getExtension();
