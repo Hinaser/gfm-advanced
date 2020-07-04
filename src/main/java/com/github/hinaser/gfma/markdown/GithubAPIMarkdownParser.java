@@ -2,8 +2,6 @@ package com.github.hinaser.gfma.markdown;
 
 import com.github.hinaser.gfma.GfmABundle;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
-import com.github.hinaser.gfma.template.ErrorTemplate;
-import com.github.hinaser.gfma.template.MarkdownTemplate;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -103,7 +101,8 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
         }
 
         private void reportSuccess(String html) {
-            markdownParsedListener.onMarkdownParseDone(html);
+            String adjustedHtml = adjustLocalImagePathRelativeToMarkdownPath(html);
+            markdownParsedListener.onMarkdownParseDone(adjustedHtml);
         }
 
         private void reportError(String errMsg, String stackTrace) {

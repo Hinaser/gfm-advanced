@@ -1,7 +1,7 @@
 package com.github.hinaser.gfma.editor;
 
 import com.intellij.ui.jcef.JBCefApp;
-import com.github.hinaser.gfma.file.MarkdownFile;
+import com.github.hinaser.gfma.markdown.MarkdownFile;
 import com.github.hinaser.gfma.GfmABundle;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.*;

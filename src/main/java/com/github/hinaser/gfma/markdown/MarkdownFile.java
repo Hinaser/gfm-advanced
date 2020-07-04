@@ -1,4 +1,4 @@
-package com.github.hinaser.gfma.file;
+package com.github.hinaser.gfma.markdown;
 
 public class MarkdownFile {
     public static final String[] MARKDOWN_EXTENSIONS = {

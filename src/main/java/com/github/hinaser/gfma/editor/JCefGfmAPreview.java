@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.github.hinaser.gfma.browser.ChromiumBrowser;
 import com.github.hinaser.gfma.markdown.MarkdownParsedListener;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -36,31 +37,36 @@ public class JCefGfmAPreview extends AbstractGfmAPreview {
     private class MarkdownParsedAdapter implements MarkdownParsedListener {
         @Override
         public void onMarkdownParseDone(String html) {
-            String filename = markdownFile.getName();
+            try {
+                String filename = markdownFile.getName();
 
-            // If any html content is not loaded into the browser, load it.
-            // Otherwise, set parsed markdown html is set via javascript for faster loading.
-            if(!isHtmlLoadedOnce) {
-                MarkdownTemplate template = MarkdownTemplate.getInstance();
-                String appliedHtml = template.getGithubFlavoredHtml(filename, html);
-                browser.loadContent(appliedHtml);
-                isHtmlLoadedOnce = true;
+                // If any html content is not loaded into the browser, load it.
+                // Otherwise, set parsed markdown html is set via javascript for faster loading.
+                if(!isHtmlLoadedOnce) {
+                    MarkdownTemplate template = MarkdownTemplate.getInstance();
+                    String appliedHtml = template.getGithubFlavoredHtml(filename, html);
+                    browser.loadContent(appliedHtml);
+                    isHtmlLoadedOnce = true;
+                }
+                else {
+                    String escapedHtml = html
+                            .replaceAll("[\"]", "\\\\\"")
+                            .replaceAll("[\n]", "\\\\n");
+                    String javascript = ""
+                            + "window.reloadHtml = function(){\n"
+                            + "  document.getElementById('title').innerHTML = \"" + filename + "\";\n"
+                            + "  document.querySelector('.markdown-body.entry-content').innerHTML = \"" + escapedHtml + "\";\n"
+                            + "  document.querySelectorAll('pre code').forEach(function(block){\n"
+                            + "    hljs.highlightBlock(block);\n"
+                            + "  });\n"
+                            + "};\n"
+                            + "reloadHtml();\n"
+                            ;
+                    browser.executeJavaScript(javascript);
+                }
             }
-            else {
-                String escapedHtml = html
-                        .replaceAll("[\"]", "\\\\\"")
-                        .replaceAll("[\n]", "\\\\n");
-                String javascript = ""
-                        + "window.reloadHtml = function(){\n"
-                        + "  document.getElementById('title').innerHTML = \"" + filename + "\";\n"
-                        + "  document.querySelector('.markdown-body.entry-content').innerHTML = \"" + escapedHtml + "\";\n"
-                        + "  document.querySelectorAll('pre code').forEach(function(block){\n"
-                        + "    hljs.highlightBlock(block);\n"
-                        + "  });\n"
-                        + "};\n"
-                        + "reloadHtml();\n"
-                        ;
-                browser.executeJavaScript(javascript);
+            catch(Exception e) {
+                onMarkdownParseFailed(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
             }
         }
 
