@@ -1,4 +1,4 @@
-package com.github.hinaser.gfma.markdown;
+package com.github.hinaser.gfma.browser;
 
 public interface MarkdownParsedListener {
     void onMarkdownParseDone(String html);

@@ -1,6 +1,7 @@
 package com.github.hinaser.gfma.markdown;
 
 import com.github.hinaser.gfma.GfmABundle;
+import com.github.hinaser.gfma.browser.MarkdownParsedListener;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.Header;

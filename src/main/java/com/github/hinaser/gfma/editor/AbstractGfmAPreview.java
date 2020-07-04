@@ -1,6 +1,6 @@
 package com.github.hinaser.gfma.editor;
 
-import com.github.hinaser.gfma.browser.IBrowser;
+import com.github.hinaser.gfma.browser.MarkdownParsedListener;
 import com.github.hinaser.gfma.markdown.*;
 import com.github.hinaser.gfma.settings.ApplicationSettingsChangedListener;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
@@ -21,19 +21,22 @@ import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
 public abstract class AbstractGfmAPreview extends UserDataHolderBase implements Disposable, FileEditor {
-    protected final VirtualFile markdownFile;
-    protected final ApplicationSettingsService appSettings;
+    protected VirtualFile markdownFile;
+    protected ApplicationSettingsService appSettings;
 
     protected Document document;
-    protected IBrowser browser;
     protected AbstractMarkdownParser markdownParser;
     protected ThrottlePoolExecutor throttlePoolExecutor = new ThrottlePoolExecutor(200);
     protected boolean isModifiedAndNotRendered = true;
 
-    public AbstractGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document) {
+    protected AbstractGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document) {
         this.markdownFile = markdownFile;
         this.document = document;
         this.appSettings = ApplicationSettingsService.getInstance();
+    }
+
+    // This must be invoked in inherited class constructor
+    public void initialize() {
         updateMarkdownParser(this.appSettings);
         this.document.addDocumentListener(new DocumentChangeListener());
         this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
@@ -90,12 +93,6 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     @NotNull
     public FileEditorState getState(@NotNull FileEditorStateLevel fileEditorStateLevel) {
         return FileEditorState.INSTANCE;
-    }
-
-    @NotNull
-    @Override
-    public JComponent getComponent() {
-        return browser.getComponent();
     }
 
     @Nullable

@@ -1,7 +1,6 @@
 package com.github.hinaser.gfma.markdown;
 
-import com.github.hinaser.gfma.template.ErrorTemplate;
-import com.github.hinaser.gfma.template.MarkdownTemplate;
+import com.github.hinaser.gfma.browser.MarkdownParsedListener;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
