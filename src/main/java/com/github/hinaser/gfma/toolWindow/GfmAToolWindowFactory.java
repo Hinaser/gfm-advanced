@@ -17,7 +17,7 @@ public class GfmAToolWindowFactory implements ToolWindowFactory {
         contentManager.addContent(content);
     }
 
-    public GfmAToolWindow getToolWindow() {
+    public static GfmAToolWindow getToolWindow() {
         return tw;
     }
 }

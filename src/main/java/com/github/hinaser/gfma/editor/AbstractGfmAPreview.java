@@ -1,9 +1,11 @@
 package com.github.hinaser.gfma.editor;
 
+import com.github.hinaser.gfma.browser.MarkdownParsedAdapter;
 import com.github.hinaser.gfma.browser.MarkdownParsedListener;
 import com.github.hinaser.gfma.markdown.*;
 import com.github.hinaser.gfma.settings.ApplicationSettingsChangedListener;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
+import com.github.hinaser.gfma.toolWindow.GfmAToolWindowFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
@@ -14,6 +16,7 @@ import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +29,7 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
 
     protected Document document;
     protected AbstractMarkdownParser markdownParser;
-    protected ThrottlePoolExecutor throttlePoolExecutor = new ThrottlePoolExecutor(200);
+    protected ThrottlePoolExecutor rateLimiter = new ThrottlePoolExecutor(200);
     protected boolean isModifiedAndNotRendered = true;
 
     protected AbstractGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document) {
@@ -37,46 +40,71 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
 
     // This must be invoked in inherited class constructor
     public void initialize() {
-        updateMarkdownParser(this.appSettings);
+        changeMarkdownParser(this.appSettings);
         this.document.addDocumentListener(new DocumentChangeListener());
         this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
+
+
+        String markdown = document.getText();
+        updatePreview(markdown);
+        updateToolWindow(markdown);
     }
 
-    public void updateMarkdownParser(ApplicationSettingsService settings) {
+    public static AbstractMarkdownParser getMarkdownParser(VirtualFile markdownFile, ApplicationSettingsService settings, MarkdownParsedListener l) {
         String parentFolderPath = markdownFile.getParent().getCanonicalPath();
         if(settings.isUseGithubMarkdownAPI()){
-            this.markdownParser = GithubAPIMarkdownParser.getInstance(parentFolderPath, getMarkdownParsedListener());
+            return GithubAPIMarkdownParser.getInstance(parentFolderPath, l);
         }
         else{
-            this.markdownParser = FlexmarkMarkdownParser.getInstance(parentFolderPath, getMarkdownParsedListener());
+            return FlexmarkMarkdownParser.getInstance(parentFolderPath, l);
         }
     }
 
-    public void updatePreview() {
-        queueMarkdownToHtmlTask(document.getText());
+    public void changeMarkdownParser(ApplicationSettingsService settings) {
+        this.markdownParser = getMarkdownParser(markdownFile, settings, getMarkdownParsedListener());
+    }
+
+    public void updatePreview(String markdown) {
+        queueMarkdownToHtmlTask(markdown);
         isModifiedAndNotRendered = false;
     }
 
     public void queueMarkdownToHtmlTask(String markdown) {
-        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdown));
+        rateLimiter.queue(markdownParser.getMarkdownProcessor(markdown));
     }
 
     public void queueMarkdownToHtmlTask(String markdown, long timeout) {
-        throttlePoolExecutor.queue(markdownParser.getMarkdownProcessor(markdown), timeout);
+        rateLimiter.queue(markdownParser.getMarkdownProcessor(markdown), timeout);
+    }
+
+    protected ThrottlePoolExecutor rateLimiterForToolWindow = new ThrottlePoolExecutor(400);
+
+    protected void updateToolWindow(String markdown) {
+        rateLimiterForToolWindow.queue(new Runnable() {
+            @Override
+            public void run() {
+                MarkdownParsedAdapter l = GfmAToolWindowFactory.getToolWindow().getMarkdownParsedListener();
+                AbstractMarkdownParser p = getMarkdownParser(markdownFile, appSettings, l);
+                p.getMarkdownProcessor(markdown).run();
+            }
+        });
     }
 
     protected class DocumentChangeListener implements DocumentListener {
         @Override
         public void documentChanged(@NotNull DocumentEvent event) {
             isModifiedAndNotRendered = true;
+
+            updateToolWindow(event.getDocument().getText());
         }
     }
 
     protected class SettingsChangeListener implements ApplicationSettingsChangedListener {
         @Override
         public void onApplicationSettingsChanged(ApplicationSettingsService newApplicationSettings) {
-            updateMarkdownParser(newApplicationSettings);
-            updatePreview();
+            changeMarkdownParser(newApplicationSettings);
+            updatePreview(document.getText());
+            updateToolWindow(document.getText());
         }
     }
 
@@ -104,7 +132,7 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     @Override
     public void selectNotify() {
         if(isModifiedAndNotRendered) {
-            updatePreview();
+            updatePreview(document.getText());
         }
     }
 

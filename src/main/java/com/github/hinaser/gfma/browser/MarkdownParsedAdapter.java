@@ -7,7 +7,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class MarkdownParsedAdapter implements MarkdownParsedListener {
     protected IBrowser browser;
@@ -33,19 +33,19 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
     public void onMarkdownParseDone(String html) {
         try {
             // If any html content is not loaded into the browser, load it.
-            // Otherwise, set parsed markdown html is set via javascript for faster loading.
+            // Otherwise, set parsed markdown html via javascript for faster loading.
             if(!isHtmlLoadedOnce) {
                 MarkdownTemplate template = MarkdownTemplate.getInstance();
                 String appliedHtml = template.getGithubFlavoredHtml(filename, html);
 
-                /**
+                /*
                  * When load string html directly like below, non-ascii multi byte string will be converted to '?'(u+003F)
-                 * So instead of loadContent, create temporary html file encoded as UTF-8 and load that html.
+                 * So instead of loadContent, create temporary html file encoded as UTF-8 and load that file to browser.
                  */
                 // browser.loadContent(appliedHtml);
 
                 File file = File.createTempFile("markdown", ".html");
-                OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8"));
+                OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
                 writer.write(appliedHtml);
                 writer.close();
 

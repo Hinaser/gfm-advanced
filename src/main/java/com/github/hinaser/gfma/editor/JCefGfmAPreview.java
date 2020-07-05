@@ -14,7 +14,7 @@ import javax.swing.*;
 
 public class JCefGfmAPreview extends AbstractGfmAPreview {
     private final IBrowser browser = new ChromiumBrowser();
-    private MarkdownParsedAdapter markdownParsedAdapter;
+    private final MarkdownParsedAdapter markdownParsedAdapter;
 
     public JCefGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document){
         super(markdownFile, document);

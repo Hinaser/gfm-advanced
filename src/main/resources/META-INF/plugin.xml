@@ -15,6 +15,7 @@
         <fileEditorProvider implementation="com.github.hinaser.gfma.editor.GfmAProvider" />
         <applicationConfigurable instance="com.github.hinaser.gfma.settings.Configurable" />
         <applicationService serviceImplementation="com.github.hinaser.gfma.settings.ApplicationSettingsService" />
+        <toolWindow id="GfmABrowser" anchor="right" factoryClass="com.github.hinaser.gfma.toolWindow.GfmAToolWindowFactory" />
     </extensions>
 
     <actions>
