@@ -157,7 +157,11 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                     reportSuccess(responseString);
                 }
                 else if(statusCode == 403) {
-                    reportError(GfmABundle.message("gfmA.error.github-rate-limit"), responseString);
+                    reportError(GfmABundle.message(
+                            "gfmA.error.github-rate-limit",
+                            xRateLimitLimit != null ? xRateLimitLimit : "-",
+                            xRateLimitReset != null ? xRateLimitReset.toString() : "-"
+                    ), responseString);
                 }
                 else {
                     reportError(GfmABundle.message("gfmA.error.github-unknown"), responseString);
