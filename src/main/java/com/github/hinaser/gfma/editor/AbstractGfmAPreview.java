@@ -83,7 +83,7 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
         rateLimiter.queue(markdownParser.getMarkdownProcessor(markdown), timeout);
     }
 
-    protected ThrottlePoolExecutor rateLimiterForToolWindow = new ThrottlePoolExecutor(400);
+    protected ThrottlePoolExecutor rateLimiterForToolWindow = new ThrottlePoolExecutor(1000);
 
     protected void updateToolWindow(String markdown) {
         rateLimiterForToolWindow.queue(new Runnable() {
