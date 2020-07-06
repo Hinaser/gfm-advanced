@@ -37,7 +37,7 @@ public class JCefGfmAPreview extends AbstractGfmAPreview {
 
     @Override
     public void dispose(){
-
+        super.dispose();
     }
 
     @Override

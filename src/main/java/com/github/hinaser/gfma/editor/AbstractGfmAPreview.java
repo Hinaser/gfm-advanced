@@ -14,7 +14,6 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +28,7 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     protected AbstractMarkdownParser markdownParser;
     protected ThrottlePoolExecutor rateLimiter = new ThrottlePoolExecutor(200);
     protected boolean isModifiedAndNotRendered = true;
+    protected String listenerId;
 
     protected AbstractGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document) {
         this.markdownFile = markdownFile;
@@ -40,8 +40,8 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     public void initialize() {
         changeMarkdownParser(this.appSettings);
         this.document.addDocumentListener(new DocumentChangeListener());
-        EditorTabListenerManager.addListener(new TabSelectedListener());
         this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
+        this.listenerId = EditorTabListenerManager.addListener(new TabSelectedListener());
 
         String markdown = document.getText();
         updatePreview(markdown);
@@ -49,6 +49,11 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
         if(markdownFile.equals(EditorTabListenerManager.getSelectedFile())){
             updateToolWindow(markdown);
         }
+    }
+
+    @Override
+    public void dispose() {
+        EditorTabListenerManager.removeListener(listenerId);
     }
 
     public static AbstractMarkdownParser getMarkdownParser(VirtualFile markdownFile, ApplicationSettingsService settings, MarkdownParsedListener l) {
