@@ -90,6 +90,7 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
             @Override
             public void run() {
                 MarkdownParsedAdapter l = GfmAToolWindowFactory.getToolWindow().getMarkdownParsedListener();
+                l.setFilename(markdownFile.getName());
                 AbstractMarkdownParser p = getMarkdownParser(markdownFile, appSettings, l);
                 p.getMarkdownProcessor(markdown).run();
             }
