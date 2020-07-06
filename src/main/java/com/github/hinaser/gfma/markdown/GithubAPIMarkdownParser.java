@@ -16,6 +16,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -78,14 +80,18 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
         }
 
         private String getApiUrl() {
-            String githubToken = appSettings.getGithubAccessToken();
-            String tokenOption = (githubToken != null && !githubToken.isEmpty()) ? "?access_token=" + githubToken : "";
-            return "https://api.github.com/markdown/raw" + tokenOption;
+            return "https://api.github.com/markdown";
         }
 
         private HttpPost getHttpPost(String url) {
             HttpPost httpPost = new HttpPost(url);
-            StringEntity stringEntity = new StringEntity(markdown, ContentType.create("text/plain", "UTF-8"));
+            ContentType contentType = ContentType.create("application/json", "UTF-8");
+            JsonObject json = Json.createObjectBuilder()
+                    .add("text", markdown)
+                    .add("mode", "gfm")
+                    .build();
+            String body = json.toString();
+            StringEntity stringEntity = new StringEntity(body, contentType);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(appSettings.getSocketTimeout())
                     .setConnectTimeout(appSettings.getConnectionTimeout())

@@ -12,6 +12,8 @@ repositories {
 
 dependencies {
     implementation 'com.vladsch.flexmark:flexmark-all:0.62.2'
+    implementation 'javax.json:javax.json-api:1.1.4'
+    implementation 'org.glassfish:javax.json:1.1'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
