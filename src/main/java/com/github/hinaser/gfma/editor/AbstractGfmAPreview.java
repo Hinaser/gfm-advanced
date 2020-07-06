@@ -2,18 +2,16 @@ package com.github.hinaser.gfma.editor;
 
 import com.github.hinaser.gfma.browser.MarkdownParsedAdapter;
 import com.github.hinaser.gfma.browser.MarkdownParsedListener;
+import com.github.hinaser.gfma.listener.EditorTabListenerManager;
 import com.github.hinaser.gfma.markdown.*;
 import com.github.hinaser.gfma.settings.ApplicationSettingsChangedListener;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
 import com.github.hinaser.gfma.toolWindow.GfmAToolWindowFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.fileEditor.FileEditorLocation;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -42,12 +40,15 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
     public void initialize() {
         changeMarkdownParser(this.appSettings);
         this.document.addDocumentListener(new DocumentChangeListener());
+        EditorTabListenerManager.addListener(new TabSelectedListener());
         this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
-
 
         String markdown = document.getText();
         updatePreview(markdown);
-        updateToolWindow(markdown);
+
+        if(markdownFile.equals(EditorTabListenerManager.getSelectedFile())){
+            updateToolWindow(markdown);
+        }
     }
 
     public static AbstractMarkdownParser getMarkdownParser(VirtualFile markdownFile, ApplicationSettingsService settings, MarkdownParsedListener l) {
@@ -90,11 +91,19 @@ public abstract class AbstractGfmAPreview extends UserDataHolderBase implements 
         });
     }
 
+    protected class TabSelectedListener implements FileEditorManagerListener {
+        @Override
+        public void selectionChanged(@NotNull FileEditorManagerEvent event) {
+            if(markdownFile.equals(EditorTabListenerManager.getSelectedFile())){
+                updateToolWindow(document.getText());
+            }
+        }
+    }
+
     protected class DocumentChangeListener implements DocumentListener {
         @Override
         public void documentChanged(@NotNull DocumentEvent event) {
             isModifiedAndNotRendered = true;
-
             updateToolWindow(event.getDocument().getText());
         }
     }

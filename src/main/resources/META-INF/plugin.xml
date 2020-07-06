@@ -3,6 +3,8 @@
     <name>GfmA</name>
     <vendor email="rindo.hinase@gmail.com" url="https://github.com/Hinaser">Hinaser</vendor>
 
+    <idea-version since-build="202" />
+
     <description><![CDATA[
     <p>Github Flavored Markdown Editor plugin for intellij platform</p>
     ]]></description>
@@ -17,6 +19,10 @@
         <applicationService serviceImplementation="com.github.hinaser.gfma.settings.ApplicationSettingsService" />
         <toolWindow id="GfmABrowser" anchor="right" factoryClass="com.github.hinaser.gfma.toolWindow.GfmAToolWindowFactory" />
     </extensions>
+
+    <projectListeners>
+        <listener class="com.github.hinaser.gfma.listener.EditorTabListenerManager" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener" />
+    </projectListeners>
 
     <actions>
         <!-- Add your actions here -->
