@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.hinaser'
-version '0.1.0'
+version '0.0.1'
 
 repositories {
     mavenCentral()
@@ -23,6 +23,5 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      <em>The first relase</em>"""
 }

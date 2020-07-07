@@ -2,7 +2,6 @@ package com.github.hinaser.gfma.editor;
 
 import com.github.hinaser.gfma.browser.IBrowser;
 import com.github.hinaser.gfma.browser.MarkdownParsedAdapter;
-import com.github.hinaser.gfma.settings.ApplicationSettingsService;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.github.hinaser.gfma.browser.ChromiumBrowser;

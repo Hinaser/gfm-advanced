@@ -6,7 +6,24 @@
     <idea-version since-build="202" />
 
     <description><![CDATA[
-    <p>Github Flavored Markdown Editor plugin for intellij platform</p>
+    <p>Yet another Github Flavored Markdown Preview plugin for intellij platform</p>
+    <p>
+      <b>Feature</b>
+    </p>
+    <ul>
+      <li>Preview markdown as github flavored markdown by Github Markdown API.</li>
+      <li>Using embedded Chromium browser to display preview.</li>
+      <li>
+        If internet connection is not available, it falls back to offline markdown parser instead.<br/>
+        <ul>
+          <li>You may choose offline parser as default markdown parser.</li>
+          <li>
+            Note that flexmark-java is used as offline markdown parser, but not every gfm syntax is parsed with the parser at this time.<br/>
+            If you want to see precise gfm preview, I recommend to use Github Markdown API parser instead.
+          </li>
+        </ul>
+      </li>
+    </ul>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
