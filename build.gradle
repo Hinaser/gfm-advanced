@@ -19,7 +19,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '202.5958.24-EAP-SNAPSHOT'
+    version '202.6109.22-EAP-SNAPSHOT'
 }
 patchPluginXml {
     changeNotes """
