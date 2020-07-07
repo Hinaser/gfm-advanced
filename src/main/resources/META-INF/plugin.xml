@@ -52,7 +52,7 @@
       Personal access token is only used to raise Github Markdown API rate limit,<br />
       and not used any other purpose.<br/>
       You can check how this plugin use your access token at <br/>
-      <a href='https://github.com/Hinaser/gfm-advanced/blob/master/src/main/java/com/github/hinaser/gfma/markdown/GithubAPIMarkdownParser.java'>https://github.com/Hinaser/gfm-advanced/blob/main/src/main/java/com/github/hinaser/gfma/markdown/GithubAPIMarkdownParser.java</a>
+      <a href='https://github.com/Hinaser/gfm-advanced/blob/master/src/main/java/com/github/hinaser/gfma/markdown/GithubAPIMarkdownParser.java'>https://github.com/Hinaser/gfm-advanced/blob/master/src/main/java/com/github/hinaser/gfma/markdown/GithubAPIMarkdownParser.java</a>
     </p>
     ]]></description>
 
