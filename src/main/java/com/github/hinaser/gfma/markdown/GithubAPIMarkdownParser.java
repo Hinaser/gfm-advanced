@@ -101,7 +101,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
 
             String authToken = appSettings.getGithubAccessToken();
             if(!authToken.isEmpty()){
-                httpPost.addHeader(HttpHeaders.AUTHORIZATION, authToken);
+                httpPost.addHeader(HttpHeaders.AUTHORIZATION, "token " + authToken);
             }
 
             httpPost.addHeader(HttpHeaders.USER_AGENT, "gfmA - An intellij plugin");

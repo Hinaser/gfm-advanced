@@ -49,13 +49,19 @@
     }
     [data-gfmaverified] {
       display: none;
-      margin-left: 12px;
+      margin-left: 16px;
     }
     [data-gfmaverified='verified'][data-forvalidtoken='true'] {
       display: inline-block;
     }
+    [data-gfmaverified='verified'][data-forvalidtoken='true'] svg {
+      fill: green;
+    }
     [data-gfmaverified='invalid'][data-forvalidtoken='false'] {
       display: inline-block;
+    }
+    [data-gfmaverified='invalid'][data-forvalidtoken='false'] svg {
+      fill: red;
     }
     [data-gfmaverified='not-set'][data-forvalidtoken='not-set'] {
       display: inline-block;
