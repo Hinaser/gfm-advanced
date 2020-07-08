@@ -1,65 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet"
-          href="{github.css}"/>
-    <link rel="stylesheet"
-          href="{github2.css}"/>
-    <style id="css-fixes">
-        .repository-with-sidebar .repository-content {
-            float: left;
-        }
-        #readme {
-        width: {width};
-        }
-        .container{
-            margin:0px;
-            margin-right:0px;
-            margin-left:0px;
-        width: {width};
-        }
-        html{
-            margin: 20px;
-        }
-        body{
-        min-width: 0px;
-        width: 100%
-        }
-        .repository-with-sidebar.with-full-navigation .repository-content {
-        width: {width};
-        }
-        {additionalCss}
-    </style>
-    <link rel="stylesheet"
-          href="{highlight.github.css}"/>
-    <script src="{highlight.min.js}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="{github.css}"/>
+  <link rel="stylesheet" href="{github2.css}"/>
+  <style id="css-fixes">
+    .repository-with-sidebar .repository-content {
+        float: left;
+    }
+    #readme {
+    width: {width};
+    }
+    .container{
+      margin:0px;
+      margin-right:0px;
+      margin-left:0px;
+    width: {width};
+    }
+    html{
+      margin: 20px;
+    }
+    body{
+      min-width: 0px;
+      width: 100%
+    }
+    .repository-with-sidebar.with-full-navigation .repository-content {
+      width: {width};
+    }
+    .gfmA-separator {
+      display: inline-block;
+      width: 1px;
+      height: 17px;
+      border-left: 1px solid #999;
+      vertical-align: text-bottom;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+    #gfmA-parser {
+      margin-left: 4px;
+      color: #097e1a;
+      font-weight: bold;
+    }
+    #gfmA-access-token {
+      display: none;
+    }
+    #gfmA-access-token[data-gfmaparser='Github Markdown API'] {
+      display: inline-block;
+    }
+    [data-gfmaverified] {
+      display: none;
+      margin-left: 12px;
+    }
+    [data-gfmaverified='verified'][data-forvalidtoken='true'] {
+      display: inline-block;
+    }
+    [data-gfmaverified='invalid'][data-forvalidtoken='false'] {
+      display: inline-block;
+    }
+    [data-gfmaverified='not-set'][data-forvalidtoken='not-set'] {
+      display: inline-block;
+    }
+    {additionalCss}
+  </style>
+  <link rel="stylesheet" href="{highlight.github.css}"/>
+  <script src="{highlight.min.js}"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
 <div class="page">
-    <div class="preview-page">
-        <div class="container">
-            <div class="repository-with-sidebar repo-container with-full-navigation">
-                <div class="repository-content context-loader-container">
-                    <div id="readme" class="readme boxed-group clearfix announce instapaper_body md">
-                        <h3>
-                            <svg aria-hidden="true" class="octicon octicon-book" height="16" version="1.1"
-                                 viewBox="0 0 16 16" width="16">
-                                <path d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path>
-                            </svg>
-                            <span id="title">{0}</span>
-                        </h3>
-
-                        <article class="markdown-body entry-content" itemprop="text">
-                            {1}
-                        </article>
-                    </div>
-                </div>
-            </div>
+  <div class="preview-page">
+    <div class="container">
+      <div class="repository-with-sidebar repo-container with-full-navigation">
+        <div class="repository-content context-loader-container">
+          <div id="readme" class="readme boxed-group clearfix announce instapaper_body md">
+            <h3>
+              <svg aria-hidden="true" class="octicon octicon-book" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                <path d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path>
+              </svg>
+              <span id="title">{0}</span>
+              <span class="gfmA-separator"></span>
+              <span id="gfmA-parsed-by">Parser:</span>
+              <span id="gfmA-parser">{parser}</span>
+              <span id="gfmA-access-token" data-gfmaparser="{parser}">
+                <span data-gfmaverified="{verified}" data-forvalidtoken="true">
+                  <svg aria-hidden="true" class="octicon" height="16" version="1.1" viewBox="0 0 24 24" width="16">
+                    <g><rect fill="none" height="24" width="24"/></g><g><path d="M23,12l-2.44-2.79l0.34-3.69l-3.61-0.82L15.4,1.5L12,2.96L8.6,1.5L6.71,4.69L3.1,5.5L3.44,9.2L1,12l2.44,2.79l-0.34,3.7 l3.61,0.82L8.6,22.5l3.4-1.47l3.4,1.46l1.89-3.19l3.61-0.82l-0.34-3.69L23,12z M10.09,16.72l-3.8-3.81l1.48-1.48l2.32,2.33 l5.85-5.87l1.48,1.48L10.09,16.72z"/></g>
+                  </svg>
+                  <span>Access token verified</span>
+                </span>
+                <span data-gfmaverified="{verified}" data-forvalidtoken="false">
+                  <svg aria-hidden="true" class="octicon octicon-book" height="16" version="1.1" viewBox="0 0 24 24" width="16">
+                    <path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                  </svg>
+                  <span>Invalid Access token</span>
+                </span>
+                <span data-gfmaverified="{verified}" data-forvalidtoken="not-set">
+                  <svg aria-hidden="true" class="octicon octicon-book" height="16" version="1.1" viewBox="0 0 24 24" width="16">
+                    <path d="M0 0h24v24H0z" fill="none"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                  </svg>
+                  <span>Access token not set</span>
+                </span>
+              </span>
+            </h3>
+            
+            <article class="markdown-body entry-content" itemprop="text">
+              {1}
+            </article>
+          </div>
         </div>
+      </div>
     </div>
-    <div>&nbsp;</div>
+  </div>
+  <div>&nbsp;</div>
 </div>
 </body>
 </html>

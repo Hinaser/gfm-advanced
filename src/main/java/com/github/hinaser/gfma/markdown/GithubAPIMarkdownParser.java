@@ -104,6 +104,8 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 httpPost.addHeader(HttpHeaders.AUTHORIZATION, authToken);
             }
 
+            httpPost.addHeader(HttpHeaders.USER_AGENT, "gfmA - An intellij plugin");
+
             return httpPost;
         }
 
@@ -138,19 +140,26 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 String responseString = EntityUtils.toString(entity);
 
                 try {
-                    xRateLimitLimit = Integer.parseInt(getHeaderValue(response, "X-RateLimit-Limit"));
+                    String v = getHeaderValue(response, "X-RateLimit-Limit");
+                    xRateLimitLimit = Integer.parseInt(v);
                 }
                 catch(NumberFormatException ignored){ }
 
                 try {
-                    xRateLimitRemaining = Integer.parseInt(getHeaderValue(response, "X-RateLimit-Remaining"));
+                    String v = getHeaderValue(response, "X-RateLimit-Remaining");
+                    xRateLimitRemaining = Integer.parseInt(v);
                 }
                 catch(NumberFormatException ignored){ }
 
                 try {
-                    xRateLimitReset = new Date(Long.parseLong(getHeaderValue(response, "X-RateLimit-Reset")) * 1000);
+                    String v = getHeaderValue(response, "X-RateLimit-Reset");
+                    xRateLimitReset = new Date(Long.parseLong(v) * 1000);
                 }
                 catch(Exception ignored){ }
+
+                // https://developer.github.com/v3/#rate-limiting
+                // As of 2020-07-08, if access token is verified, X-RateLimit-Limit is 5000.
+                appSettings.setAccessTokenValid(xRateLimitLimit >= 5000);
 
                 int statusCode = response.getStatusLine().getStatusCode();
                 if(statusCode == 200) {

@@ -26,6 +26,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
     private boolean useGithubMarkdownAPI = false;
     private String githubAccessToken = "";
+    private boolean isAccessTokenValid = false;
     private int connectionTimeout = 2000;
     private int socketTimeout = 2000;
     private boolean useFullWidthRendering = false;
@@ -54,6 +55,14 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
             this.githubAccessToken = githubAccessToken;
             notifyListeners();
         }
+    }
+
+    public boolean isGithubAccessTokenValid() {
+        return isAccessTokenValid;
+    }
+
+    public void setAccessTokenValid(boolean isValid) {
+        isAccessTokenValid = isValid;
     }
 
     public int getConnectionTimeout() {

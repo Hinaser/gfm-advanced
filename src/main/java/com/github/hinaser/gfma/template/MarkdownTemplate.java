@@ -15,6 +15,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class MarkdownTemplate extends AbstractTemplate {
+    protected ApplicationSettingsService settings = ApplicationSettingsService.getInstance();
+
     private static class Singleton {
         private static final MarkdownTemplate INSTANCE = new MarkdownTemplate();
     }
@@ -45,7 +47,7 @@ public class MarkdownTemplate extends AbstractTemplate {
             markdownParams.put("highlight.github.css", highlightGithubCss.toExternalForm());
             markdownParams.put("highlight.min.js", highlightMinJs.toExternalForm());
         } catch (MalformedURLException e) {
-            e.printStackTrace(); //todo?
+            e.printStackTrace();
         }
 
         for (Map.Entry<String, Object> param : markdownParams.entrySet()) {
@@ -58,9 +60,16 @@ public class MarkdownTemplate extends AbstractTemplate {
     }
 
     public String getGithubFlavoredHtml(String filename, String markdownHtml) {
-        ApplicationSettingsService settings = ApplicationSettingsService.getInstance();
         Map<String, String> params = new HashMap<>();
         params.put("width", settings.isUseFullWidthRendering() ?  "100%" : "980px");
+        params.put("parser", settings.isUseGithubMarkdownAPI() ? "Github Markdown API" : "Flexmark-java");
+        if(!settings.getGithubAccessToken().isEmpty()){
+            params.put("verified", settings.isGithubAccessTokenValid() ? "verified" : "invalid");
+        }
+        else{
+            params.put("verified", "not-set");
+        }
+
         return applyTemplate(params, filename, markdownHtml);
     }
 

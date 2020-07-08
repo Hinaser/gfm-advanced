@@ -1,5 +1,6 @@
 package com.github.hinaser.gfma.browser;
 
+import com.github.hinaser.gfma.settings.ApplicationSettingsService;
 import com.github.hinaser.gfma.template.ErrorTemplate;
 import com.github.hinaser.gfma.template.MarkdownTemplate;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -10,13 +11,13 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 public class MarkdownParsedAdapter implements MarkdownParsedListener {
+    protected ApplicationSettingsService settings;
     protected IBrowser browser;
     protected String filename;
     protected boolean isHtmlLoadedOnce = false;
 
-    public MarkdownParsedAdapter() { }
-
     public MarkdownParsedAdapter(IBrowser browser, String filename) {
+        this.settings = ApplicationSettingsService.getInstance();
         this.browser = browser;
         this.filename = filename;
     }
@@ -54,15 +55,27 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                 isHtmlLoadedOnce = true;
             }
             else {
+                String parser = settings.isUseGithubMarkdownAPI() ? "Github Markdown API" : "Flexmark-java";
+                String accessTokenVerified = settings.getGithubAccessToken().isEmpty() ? "not-set"
+                        : settings.isGithubAccessTokenValid() ? "verified" : "invalid";
+
                 String escapedHtml = html
                         .replaceAll("[\"]", "\\\\\"")
                         .replaceAll("[\n]", "\\\\n");
+
                 String javascript = ""
                         + "window.reloadHtml = function(){\n"
-                        + "  document.getElementById('title').innerHTML = \"" + filename + "\";\n"
+                        + "  document.getElementById('title').innerText = \"" + filename + "\";\n"
                         + "  document.querySelector('.markdown-body.entry-content').innerHTML = \"" + escapedHtml + "\";\n"
                         + "  document.querySelectorAll('pre code').forEach(function(block){\n"
                         + "    hljs.highlightBlock(block);\n"
+                        + "  });\n"
+                        + "  document.getElementById('gfmA-parser').innerText = \"" + parser + "\"\n"
+                        + "  document.querySelectorAll('[data-gfmaparser]').forEach(function(el){\n"
+                        + "    el.dataset.gfmaparser = \"" + parser + "\"\n"
+                        + "  });\n"
+                        + "  document.querySelectorAll('[data-gfmaverified]').forEach(function(el){\n"
+                        + "    el.dataset.gfmaverified = \"" + accessTokenVerified + "\"\n"
                         + "  });\n"
                         + "};\n"
                         + "reloadHtml();\n"
