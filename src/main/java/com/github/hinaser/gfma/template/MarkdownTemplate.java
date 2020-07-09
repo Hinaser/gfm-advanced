@@ -69,6 +69,17 @@ public class MarkdownTemplate extends AbstractTemplate {
         else{
             params.put("verified", "not-set");
         }
+        if(settings.isUseGithubMarkdownAPI()){
+            String rateLimit =
+                    "X-RateLimit-Limit = " + settings.getRateLimitLimit().toString() + "\n" +
+                    "X-RateLimit-Remaining = " + settings.getRateLimitRemaining().toString() + "\n" +
+                    "X-RateLimit-Reset = " + settings.getRateLimitReset().toString()
+                    ;
+            params.put("rateLimit", rateLimit);
+        }
+        else{
+            params.put("rateLimit", "");
+        }
 
         return applyTemplate(params, filename, markdownHtml);
     }

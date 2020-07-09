@@ -58,6 +58,11 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                 String parser = settings.isUseGithubMarkdownAPI() ? "Github Markdown API" : "Flexmark-java";
                 String accessTokenVerified = settings.getGithubAccessToken().isEmpty() ? "not-set"
                         : settings.isGithubAccessTokenValid() ? "verified" : "invalid";
+                String rateLimit = !settings.isUseGithubMarkdownAPI() ? "" :
+                        "X-RateLimit-Limit = " + settings.getRateLimitLimit().toString() + "\\n" +
+                                "X-RateLimit-Remaining = " + settings.getRateLimitRemaining().toString() + "\\n" +
+                                "X-RateLimit-Reset = " + settings.getRateLimitReset().toString()
+                        ;
 
                 String escapedHtml = html
                         .replaceAll("[\"]", "\\\\\"")
@@ -70,13 +75,14 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                         + "  document.querySelectorAll('pre code').forEach(function(block){\n"
                         + "    hljs.highlightBlock(block);\n"
                         + "  });\n"
-                        + "  document.getElementById('gfmA-parser').innerText = \"" + parser + "\"\n"
+                        + "  document.getElementById('gfmA-parser').innerText = \"" + parser + "\";\n"
                         + "  document.querySelectorAll('[data-gfmaparser]').forEach(function(el){\n"
-                        + "    el.dataset.gfmaparser = \"" + parser + "\"\n"
+                        + "    el.dataset.gfmaparser = \"" + parser + "\"\n;"
                         + "  });\n"
                         + "  document.querySelectorAll('[data-gfmaverified]').forEach(function(el){\n"
-                        + "    el.dataset.gfmaverified = \"" + accessTokenVerified + "\"\n"
+                        + "    el.dataset.gfmaverified = \"" + accessTokenVerified + "\"\n;"
                         + "  });\n"
+                        + "  document.getElementById('gfmA-parser').title = \"" + rateLimit + "\";\n"
                         + "};\n"
                         + "reloadHtml();\n"
                         ;

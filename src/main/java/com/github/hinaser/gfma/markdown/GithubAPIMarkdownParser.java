@@ -29,9 +29,6 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     private final CloseableHttpClient httpClient;
     private final ApplicationSettingsService appSettings;
     protected String parentFolderPath; // Path to the folder which has the parsing markdown file.
-    protected Integer xRateLimitLimit = null;
-    protected Integer xRateLimitRemaining = null;
-    protected Date xRateLimitReset = null;
     protected boolean isInvalidToken = false;
     protected String lastUsedAccessToken = ""; // For detecting token updated. If invalid token is not updated, don't use it for API request.
 
@@ -141,22 +138,28 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 response = httpClient.execute(httpPost);
                 HttpEntity entity = response.getEntity();
                 String responseString = EntityUtils.toString(entity);
+                int xRateLimitLimit = 0;
+                int xRateLimitRemaining = 0;
+                Date xRateLimitReset = null;
 
                 try {
                     String v = getHeaderValue(response, "X-RateLimit-Limit");
                     xRateLimitLimit = Integer.parseInt(v);
+                    appSettings.setRateLimitLimit(xRateLimitLimit);
                 }
                 catch(NumberFormatException ignored){ }
 
                 try {
                     String v = getHeaderValue(response, "X-RateLimit-Remaining");
                     xRateLimitRemaining = Integer.parseInt(v);
+                    appSettings.setRateLimitRemaining(xRateLimitRemaining);
                 }
                 catch(NumberFormatException ignored){ }
 
                 try {
                     String v = getHeaderValue(response, "X-RateLimit-Reset");
                     xRateLimitReset = new Date(Long.parseLong(v) * 1000);
+                    appSettings.setRateLimitReset(xRateLimitReset);
                 }
                 catch(Exception ignored){ }
 
@@ -181,7 +184,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 else if(statusCode == 403) { // 403: Forbidden
                     reportError(GfmABundle.message(
                             "gfmA.error.github-rate-limit",
-                            xRateLimitLimit != null ? xRateLimitLimit : "-",
+                            xRateLimitLimit,
                             xRateLimitReset != null ? xRateLimitReset.toString() : "-"
                     ), responseString);
                 }

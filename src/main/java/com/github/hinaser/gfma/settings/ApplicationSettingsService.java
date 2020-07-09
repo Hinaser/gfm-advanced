@@ -9,6 +9,7 @@ import com.intellij.openapi.util.Disposer;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,10 +27,14 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
     private boolean useGithubMarkdownAPI = false;
     private String githubAccessToken = "";
-    private boolean isAccessTokenValid = false;
     private int connectionTimeout = 2000;
     private int socketTimeout = 2000;
     private boolean useFullWidthRendering = false;
+
+    private boolean isAccessTokenValid = false;
+    private Integer rateLimitLimit = null;
+    private Integer rateLimitRemaining = null;
+    private Date rateLimitReset = null;
 
     public static ApplicationSettingsService getInstance() {
         return ServiceManager.getService(ApplicationSettingsService.class);
@@ -55,14 +60,6 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
             this.githubAccessToken = githubAccessToken;
             notifyListeners();
         }
-    }
-
-    public boolean isGithubAccessTokenValid() {
-        return isAccessTokenValid;
-    }
-
-    public void setAccessTokenValid(boolean isValid) {
-        isAccessTokenValid = isValid;
     }
 
     public int getConnectionTimeout() {
@@ -97,6 +94,21 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
             notifyListeners();
         }
     }
+
+    public boolean isGithubAccessTokenValid() {
+        return isAccessTokenValid;
+    }
+
+    public void setAccessTokenValid(boolean isValid) {
+        isAccessTokenValid = isValid;
+    }
+
+    public Integer getRateLimitLimit(){ return rateLimitLimit; }
+    public void setRateLimitLimit(Integer limit){ rateLimitLimit = limit; }
+    public Integer getRateLimitRemaining(){ return rateLimitRemaining; }
+    public void setRateLimitRemaining(Integer remaining){ rateLimitRemaining = remaining; }
+    public Date getRateLimitReset(){ return rateLimitReset; }
+    public void setRateLimitReset(Date reset){ rateLimitReset = reset; }
 
     public void notifyListeners() {
         for (ApplicationSettingsChangedListener listener : this.listeners) {
