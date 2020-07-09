@@ -165,7 +165,10 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 if(statusCode == 200) {
                     reportSuccess(responseString);
                 }
-                else if(statusCode == 403) {
+                else if(statusCode == 401){ // 401: Unauthorized
+                    reportError(GfmABundle.message("gfmA.error.github-bad-credential"), responseString);
+                }
+                else if(statusCode == 403) { // 403: Forbidden
                     reportError(GfmABundle.message(
                             "gfmA.error.github-rate-limit",
                             xRateLimitLimit != null ? xRateLimitLimit : "-",

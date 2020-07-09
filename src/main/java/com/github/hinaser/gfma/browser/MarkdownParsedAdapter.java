@@ -14,7 +14,7 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
     protected ApplicationSettingsService settings;
     protected IBrowser browser;
     protected String filename;
-    protected boolean isHtmlLoadedOnce = false;
+    protected boolean fastHtmlLoadingReady = false;
 
     public MarkdownParsedAdapter(IBrowser browser, String filename) {
         this.settings = ApplicationSettingsService.getInstance();
@@ -35,7 +35,7 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
         try {
             // If any html content is not loaded into the browser, load it.
             // Otherwise, set parsed markdown html via javascript for faster loading.
-            if(!isHtmlLoadedOnce) {
+            if(!fastHtmlLoadingReady) {
                 MarkdownTemplate template = MarkdownTemplate.getInstance();
                 String appliedHtml = template.getGithubFlavoredHtml(filename, html);
 
@@ -52,7 +52,7 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
 
                 browser.loadFile(file);
 
-                isHtmlLoadedOnce = true;
+                fastHtmlLoadingReady = true;
             }
             else {
                 String parser = settings.isUseGithubMarkdownAPI() ? "Github Markdown API" : "Flexmark-java";
@@ -84,12 +84,15 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
             }
         }
         catch(Exception e) {
+            fastHtmlLoadingReady = false;
             onMarkdownParseFailed(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
         }
     }
 
     @Override
     public void onMarkdownParseFailed(String errorMessage, String stackTrace) {
+        fastHtmlLoadingReady = false;
+
         ErrorTemplate template = ErrorTemplate.getInstance();
         String errorHtml = template.getErrorHtml(errorMessage, stackTrace);
         browser.loadContent(errorHtml);
