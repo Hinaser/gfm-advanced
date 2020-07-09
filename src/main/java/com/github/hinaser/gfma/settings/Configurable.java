@@ -55,7 +55,8 @@ public class Configurable implements SearchableConfigurable {
                 appSettings.getSocketTimeout() != (Integer)appSettingsComponent.getSocketTimeoutSpinner().getValue() ||
                 !appSettings.getGithubAccessToken().equals(String.valueOf(appSettingsComponent.getGithubAccessTokenField().getPassword())) ||
                 appSettings.isUseGithubMarkdownAPI() != appSettingsComponent.getUseGithubMarkdownAPICheckBox().isSelected() ||
-                appSettings.isUseFullWidthRendering() != appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected()
+                appSettings.isUseFullWidthRendering() != appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected() ||
+                appSettings.isShowActiveParser() != appSettingsComponent.getShowActiveParserCheckBox().isSelected()
             ;
     }
 
@@ -66,6 +67,7 @@ public class Configurable implements SearchableConfigurable {
         appSettings.setSocketTimeout((Integer) appSettingsComponent.getSocketTimeoutSpinner().getValue());
         appSettings.setUseGithubMarkdownAPI(appSettingsComponent.getUseGithubMarkdownAPICheckBox().isSelected());
         appSettings.setUseFullWidthRendering(appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected());
+        appSettings.setShowActiveParser(appSettingsComponent.getShowActiveParserCheckBox().isSelected());
     }
 
     @Override
@@ -81,6 +83,7 @@ public class Configurable implements SearchableConfigurable {
                         appSettingsComponent.getSocketTimeoutSpinner().setValue(appSettings.getSocketTimeout());
                         appSettingsComponent.getUseGithubMarkdownAPICheckBox().setSelected(appSettings.isUseGithubMarkdownAPI());
                         appSettingsComponent.getUseFullWidthRenderingCheckBox().setSelected(appSettings.isUseFullWidthRendering());
+                        appSettingsComponent.getShowActiveParserCheckBox().setSelected(appSettings.isShowActiveParser());
                     }
                 });
             }

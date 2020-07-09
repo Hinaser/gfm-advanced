@@ -11,6 +11,7 @@ public class ApplicationSettingsComponent implements Disposable {
     private JSpinner connectionTimeoutSpinner;
     private JSpinner socketTimeoutSpinner;
     private JCheckBox useFullWidthRenderingCheckBox;
+    private JCheckBox showActiveParserCheckBox;
 
     public JPanel getPanel() {
         return panel;
@@ -34,6 +35,10 @@ public class ApplicationSettingsComponent implements Disposable {
 
     public JCheckBox getUseFullWidthRenderingCheckBox() {
         return useFullWidthRenderingCheckBox;
+    }
+
+    public JCheckBox getShowActiveParserCheckBox() {
+        return showActiveParserCheckBox;
     }
 
     @Override

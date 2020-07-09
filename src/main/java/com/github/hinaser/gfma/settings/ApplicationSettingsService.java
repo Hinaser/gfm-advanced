@@ -23,6 +23,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private static final String CONNECTION_TIMEOUT = "connectionTimeout";
     private static final String SOCKET_TIMEOUT = "socketTimeout";
     private static final String USE_FULL_WIDTH_RENDERING = "useFullWidthRendering";
+    private static final String SHOW_ACTIVE_PARSER = "showActiveParser";
 
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
     private boolean useGithubMarkdownAPI = false;
@@ -30,6 +31,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private int connectionTimeout = 2000;
     private int socketTimeout = 2000;
     private boolean useFullWidthRendering = false;
+    private boolean showActiveParser = true;
 
     private boolean isAccessTokenValid = false;
     private Integer rateLimitLimit = null;
@@ -95,6 +97,17 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         }
     }
 
+    public boolean isShowActiveParser() {
+        return showActiveParser;
+    }
+
+    public void setShowActiveParser(boolean showActiveParser) {
+        if(this.showActiveParser != showActiveParser){
+            this.showActiveParser = showActiveParser;
+            notifyListeners();
+        }
+    }
+
     public boolean isGithubAccessTokenValid() {
         return isAccessTokenValid;
     }
@@ -127,6 +140,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         element.setAttribute(CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         element.setAttribute(SOCKET_TIMEOUT, String.valueOf(socketTimeout));
         element.setAttribute(USE_FULL_WIDTH_RENDERING, String.valueOf(useFullWidthRendering));
+        element.setAttribute(SHOW_ACTIVE_PARSER, String.valueOf(showActiveParser));
         return element;
     }
 
@@ -151,6 +165,10 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         String useFullWidthRendering = state.getAttributeValue(USE_FULL_WIDTH_RENDERING);
         if (useFullWidthRendering != null) {
             setUseFullWidthRendering(Boolean.parseBoolean(useFullWidthRendering));
+        }
+        String showActiveParser = state.getAttributeValue(SHOW_ACTIVE_PARSER);
+        if(showActiveParser != null){
+            setShowActiveParser(Boolean.parseBoolean(showActiveParser));
         }
         notifyListeners();
     }

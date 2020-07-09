@@ -80,6 +80,9 @@ public class MarkdownTemplate extends AbstractTemplate {
         else{
             params.put("rateLimit", "");
         }
+        if(settings.isShowActiveParser()){
+            params.put("showActiveParser", "true");
+        }
 
         return applyTemplate(params, filename, markdownHtml);
     }
