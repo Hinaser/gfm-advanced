@@ -32,6 +32,8 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     protected Integer xRateLimitLimit = null;
     protected Integer xRateLimitRemaining = null;
     protected Date xRateLimitReset = null;
+    protected boolean isInvalidToken = false;
+    protected String lastUsedAccessToken = ""; // For detecting token updated. If invalid token is not updated, don't use it for API request.
 
     protected GithubAPIMarkdownParser(String parentFolderPath, MarkdownParsedListener listener) {
         super(listener);
@@ -83,7 +85,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
             return "https://api.github.com/markdown";
         }
 
-        private HttpPost getHttpPost(String url) {
+        private HttpPost getHttpPost(String url, boolean noAccessToken) {
             HttpPost httpPost = new HttpPost(url);
             ContentType contentType = ContentType.create("application/json", "UTF-8");
             JsonObject json = Json.createObjectBuilder()
@@ -99,9 +101,11 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
             httpPost.setEntity(stringEntity);
             httpPost.setConfig(requestConfig);
 
-            String authToken = appSettings.getGithubAccessToken();
-            if(!authToken.isEmpty()){
-                httpPost.addHeader(HttpHeaders.AUTHORIZATION, "token " + authToken);
+            if(!noAccessToken){
+                String authToken = appSettings.getGithubAccessToken();
+                if(!authToken.isEmpty()){
+                    httpPost.addHeader(HttpHeaders.AUTHORIZATION, "token " + authToken);
+                }
             }
 
             httpPost.addHeader(HttpHeaders.USER_AGENT, "gfmA - An intellij plugin");
@@ -128,10 +132,9 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
             return value == null ? "" : value;
         }
 
-        @Override
-        public void run() {
+        private void sendAPI(boolean noAccessToken) {
             String apiUrl = getApiUrl();
-            HttpPost httpPost = getHttpPost(apiUrl);
+            HttpPost httpPost = getHttpPost(apiUrl, noAccessToken);
 
             CloseableHttpResponse response = null;
             try {
@@ -163,10 +166,17 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
 
                 int statusCode = response.getStatusLine().getStatusCode();
                 if(statusCode == 200) {
+                    if(!noAccessToken){
+                        isInvalidToken = false;
+                    }
                     reportSuccess(responseString);
                 }
                 else if(statusCode == 401){ // 401: Unauthorized
-                    reportError(GfmABundle.message("gfmA.error.github-bad-credential"), responseString);
+                    isInvalidToken = true;
+                    // reportError(GfmABundle.message("gfmA.error.github-bad-credential"), responseString);
+
+                    // Retry API without invalid access token to at least make parser work done.
+                    sendAPI(true);
                 }
                 else if(statusCode == 403) { // 403: Forbidden
                     reportError(GfmABundle.message(
@@ -198,6 +208,12 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                     }
                 }
             }
+        }
+
+        @Override
+        public void run() {
+            boolean isInvalidTokenStillUsed = isInvalidToken && appSettings.getGithubAccessToken().equals(lastUsedAccessToken);
+            sendAPI(isInvalidTokenStillUsed);
         }
     }
 }
