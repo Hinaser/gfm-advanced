@@ -3,7 +3,6 @@ package com.github.hinaser.gfma.markdown;
 import com.github.hinaser.gfma.GfmABundle;
 import com.github.hinaser.gfma.browser.MarkdownParsedListener;
 import com.github.hinaser.gfma.settings.ApplicationSettingsService;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -47,6 +46,10 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     @Override
     public Runnable getMarkdownProcessor(String markdown) {
         return new MarkdownProcessor(markdown);
+    }
+
+    public void fallbackToOfflineParser() {
+        appSettings.setUseGithubMarkdownAPI(false);
     }
 
     private class MarkdownProcessor implements Runnable {
@@ -193,13 +196,16 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
                 }
             }
             catch (org.apache.commons.httpclient.ConnectTimeoutException | org.apache.http.conn.ConnectTimeoutException e) {
-                reportError(GfmABundle.message("gfmA.error.request-timeout"), ExceptionUtils.getStackTrace(e));
+                // reportError(GfmABundle.message("gfmA.error.request-timeout"), ExceptionUtils.getStackTrace(e));
+                fallbackToOfflineParser();
             }
             catch (UnknownHostException e) {
-                reportError(GfmABundle.message("gfmA.error.github-unavailable"), ExceptionUtils.getStackTrace(e));
+                // reportError(GfmABundle.message("gfmA.error.github-unavailable"), ExceptionUtils.getStackTrace(e));
+                fallbackToOfflineParser();
             }
             catch (IOException e) {
-                reportError(GfmABundle.message("gfmA.error.io-exception"), ExceptionUtils.getStackTrace(e)); // todo
+                // reportError(GfmABundle.message("gfmA.error.io-exception"), ExceptionUtils.getStackTrace(e)); // todo
+                fallbackToOfflineParser();
             }
             finally {
                 if (response != null) {
