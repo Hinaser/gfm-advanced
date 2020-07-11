@@ -72,6 +72,14 @@
     [data-gfmaverified='not-set'][data-forvalidtoken='not-set'] {
       display: inline-block;
     }
+    #gfmA-fallback {
+      display: none;
+      color: #dc3545;
+      margin-left: 16px;
+    }
+    #gfmA-fallback[data-gfmafallback='true'] {
+      display: inline-block;
+    }
     {additionalCss}
   </style>
   <link rel="stylesheet" href="{highlight.github.css}"/>
@@ -115,6 +123,12 @@
                     </svg>
                     <span>Access token not set</span>
                   </span>
+                </span>
+                <span id="gfmA-fallback" data-gfmafallback="{isFallBack}">
+                  <svg aria-hidden="true" class="octicon octicon-book" height="16" version="1.1" viewBox="0 0 24 24" width="16">
+                    <path d="M0 0h24v24H0z" fill="none"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                  </svg>
+                  <span>Fallback to offline parser</span>
                 </span>
               </span>
             </h3>

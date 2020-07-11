@@ -49,7 +49,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     }
 
     public void fallbackToOfflineParser() {
-        appSettings.setUseGithubMarkdownAPI(false);
+        appSettings.setFallbackToOfflineParser();
     }
 
     private class MarkdownProcessor implements Runnable {
