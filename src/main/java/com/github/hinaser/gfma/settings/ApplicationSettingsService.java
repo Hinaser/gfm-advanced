@@ -26,7 +26,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private static final String SHOW_ACTIVE_PARSER = "showActiveParser";
 
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
-    private boolean useGithubMarkdownAPI = false;
+    private boolean useGithubMarkdownAPI = true;
     private String githubAccessToken = "";
     private int connectionTimeout = 2000;
     private int socketTimeout = 2000;
