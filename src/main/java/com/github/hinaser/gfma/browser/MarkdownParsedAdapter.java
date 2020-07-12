@@ -64,6 +64,7 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                                 "X-RateLimit-Reset = " + settings.getRateLimitReset().toString()
                         ;
                 String showActiveParser = settings.isShowActiveParser() ? "true" : "false";
+                String isFallbackToOfflineParser = settings.isFallingBackToOfflineParser() ? "true" : "false";
 
                 String escapedHtml = html
                         .replaceAll("[\"]", "\\\\\"")
@@ -85,6 +86,7 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                         + "  });\n"
                         + "  document.getElementById('gfmA-parser').title = \"" + rateLimit + "\";\n"
                         + "  document.getElementById('gfmA-show-active-parser').dataset.show = \"" + showActiveParser + "\";\n"
+                        + "  document.getElementById('gfmA-fallback').dataset.gfmafallback = \"" + isFallbackToOfflineParser + "\";\n"
                         + "};\n"
                         + "reloadHtml();\n"
                         ;

@@ -1,12 +1,12 @@
 package com.github.hinaser.gfma.markdown;
 
 import com.github.hinaser.gfma.browser.MarkdownParsedListener;
+import com.vladsch.flexmark.profile.pegdown.Extensions;
+import com.vladsch.flexmark.profile.pegdown.PegdownOptionsAdapter;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.parser.ParserEmulationProfile;
-import com.vladsch.flexmark.util.data.MutableDataHolder;
-import com.vladsch.flexmark.util.data.MutableDataSet;
+import com.vladsch.flexmark.util.data.DataHolder;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import java.util.regex.Matcher;
@@ -52,8 +52,7 @@ public class FlexmarkMarkdownParser extends AbstractMarkdownParser {
     }
 
     public String markdownToHtml(String markdown) {
-        MutableDataHolder options = new MutableDataSet();
-        options.setFrom(ParserEmulationProfile.GITHUB);
+        DataHolder options = PegdownOptionsAdapter.flexmarkOptions(Extensions.GITHUB_DOCUMENT_COMPATIBLE);
 
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();

@@ -1,10 +1,13 @@
 plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.4.21'
+    id 'org.jetbrains.changelog' version '0.4.0'
 }
 
+apply plugin: 'org.jetbrains.changelog'
+
 group 'com.github.hinaser'
-version '0.0.1'
+version '0.0.2'
 
 repositories {
     mavenCentral()
@@ -22,6 +25,19 @@ intellij {
     version '202.6109.22-EAP-SNAPSHOT'
 }
 patchPluginXml {
-    changeNotes """
-      <em>The first relase</em>"""
+    changeNotes({ changelog.getLatest().toHTML() })
+}
+publishPlugin {
+    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+}
+
+changelog {
+    version = "${project.version}"
+    path = "${project.projectDir}/CHANGELOG.md"
+    headerFormat = "[{0}]"
+    headerArguments = ["${project.version}"]
+    itemPrefix = "-"
+    keepUnreleasedSection = true
+    unreleasedTerm = "[Unreleased]"
+    groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
 }

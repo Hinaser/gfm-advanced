@@ -26,13 +26,14 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private static final String SHOW_ACTIVE_PARSER = "showActiveParser";
 
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
-    private boolean useGithubMarkdownAPI = false;
+    private boolean useGithubMarkdownAPI = true;
     private String githubAccessToken = "";
     private int connectionTimeout = 2000;
     private int socketTimeout = 2000;
     private boolean useFullWidthRendering = false;
     private boolean showActiveParser = true;
 
+    private boolean isFallingBackToOfflineParser = false;
     private boolean isAccessTokenValid = false;
     private Integer rateLimitLimit = null;
     private Integer rateLimitRemaining = null;
@@ -43,6 +44,8 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     }
 
     public void setUseGithubMarkdownAPI(boolean useGithubMarkdownAPI) {
+        this.isFallingBackToOfflineParser = false;
+
         if (this.useGithubMarkdownAPI != useGithubMarkdownAPI) {
             this.useGithubMarkdownAPI = useGithubMarkdownAPI;
             notifyListeners();
@@ -51,6 +54,18 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
 
     public boolean isUseGithubMarkdownAPI() {
         return useGithubMarkdownAPI;
+    }
+
+    public void setFallbackToOfflineParser(){
+        if(this.useGithubMarkdownAPI){
+            this.useGithubMarkdownAPI = false;
+            this.isFallingBackToOfflineParser = true;
+            notifyListeners();
+        }
+    }
+
+    public boolean isFallingBackToOfflineParser(){
+        return isFallingBackToOfflineParser;
     }
 
     public String getGithubAccessToken() {

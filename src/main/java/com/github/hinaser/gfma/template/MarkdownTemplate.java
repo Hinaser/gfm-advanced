@@ -83,6 +83,12 @@ public class MarkdownTemplate extends AbstractTemplate {
         if(settings.isShowActiveParser()){
             params.put("showActiveParser", "true");
         }
+        if(settings.isFallingBackToOfflineParser()){
+            params.put("isFallBack", "true");
+        }
+        else{
+            params.put("isFallBack", "false");
+        }
 
         return applyTemplate(params, filename, markdownHtml);
     }
