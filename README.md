@@ -1,3 +1,5 @@
+![](https://raw.githubusercontent.com/Hinaser/gfm-advanced/master/docs/gfmA-demo.gif)
+
 # gfm-advanced
 
 Another Github Flavored Markdown plugin for intellij platform.
@@ -26,12 +28,25 @@ So I strongly recommend to set auth token which can be generated at Github page 
 In case you don't have a Github account and/or internet connection is not available, markdown parser will
 fall back to `flexmark-java` markdown parser.
 
-## Special Thanks
-- [gfm-plugin](https://github.com/ShyykoSerhiy/gfm-plugin)  
+## Dependencies
+- [gfm-plugin](https://github.com/ShyykoSerhiy/gfm-plugin) - \[MIT License]
+  Copyright (c) 2015 shyyko.serhiy  
+  
   A lot of thanks to the author of this plugin. I was helped by the plugin for a long time.
-- [java-cef](https://bitbucket.org/chromiumembedded/java-cef/src/master/)  
+  
+- [java-cef](https://bitbucket.org/chromiumembedded/java-cef/src/master/) - \[BSD 3-Clause License]
+  Copyright (c) 2008-2013 Marshall A. Greenblatt. Portions
+  Copyright (c) 2006-2009 Google Inc.
+  
   Chromium embedded framework for Java. Working good with this plugin so far.
-- [flexmark-java](https://github.com/vsch/flexmark-java)  
-  Offline markdown parser.
-- [highlightjs](https://github.com/highlightjs/highlight.js/)  
+  
+- [flexmark-java](https://github.com/vsch/flexmark-java) - \[BSD 2-Clause License]
+  Copyright (c) 2015-2016, Atlassian Pty Ltd
+  Copyright (c) 2016-2018, Vladimir Schneider,
+  
+  Used as an offline markdown parser.
+  
+- [highlightjs](https://github.com/highlightjs/highlight.js/) - \[BSD 3-Clause License]  
+  Copyright (c) 2006, Ivan Sagalaev.
+  
   Syntax highlighter.
