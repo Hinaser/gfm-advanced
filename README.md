@@ -1,6 +1,6 @@
-![](https://raw.githubusercontent.com/Hinaser/gfm-advanced/master/docs/gfmA-demo.gif)
-
 # gfm-advanced
+
+![](https://raw.githubusercontent.com/Hinaser/gfm-advanced/master/docs/gfmA-demo.gif)
 
 Another Github Flavored Markdown plugin for intellij platform.
 
@@ -29,19 +29,19 @@ In case you don't have a Github account and/or internet connection is not availa
 fall back to `flexmark-java` markdown parser.
 
 ## Dependencies
-- [gfm-plugin](https://github.com/ShyykoSerhiy/gfm-plugin) - \[MIT License]
+- [gfm-plugin](https://github.com/ShyykoSerhiy/gfm-plugin) - \[MIT License]  
   Copyright (c) 2015 shyyko.serhiy  
   
   A lot of thanks to the author of this plugin. I was helped by the plugin for a long time.
   
-- [java-cef](https://bitbucket.org/chromiumembedded/java-cef/src/master/) - \[BSD 3-Clause License]
-  Copyright (c) 2008-2013 Marshall A. Greenblatt. Portions
+- [java-cef](https://bitbucket.org/chromiumembedded/java-cef/src/master/) - \[BSD 3-Clause License]  
+  Copyright (c) 2008-2013 Marshall A. Greenblatt. Portions  
   Copyright (c) 2006-2009 Google Inc.
   
   Chromium embedded framework for Java. Working good with this plugin so far.
   
-- [flexmark-java](https://github.com/vsch/flexmark-java) - \[BSD 2-Clause License]
-  Copyright (c) 2015-2016, Atlassian Pty Ltd
+- [flexmark-java](https://github.com/vsch/flexmark-java) - \[BSD 2-Clause License]  
+  Copyright (c) 2015-2016, Atlassian Pty Ltd  
   Copyright (c) 2016-2018, Vladimir Schneider,
   
   Used as an offline markdown parser.
