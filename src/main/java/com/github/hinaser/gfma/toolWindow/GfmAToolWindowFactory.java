@@ -8,7 +8,7 @@ import com.intellij.ui.content.ContentManager;
 import org.jetbrains.annotations.NotNull;
 
 public class GfmAToolWindowFactory implements ToolWindowFactory {
-    private static final GfmAToolWindow tw = new GfmAToolWindow();
+    private static final GfmAToolWindow tw = GfmAToolWindow.getInstance();
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {

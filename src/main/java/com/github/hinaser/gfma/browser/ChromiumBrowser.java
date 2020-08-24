@@ -26,7 +26,7 @@ public class ChromiumBrowser implements IBrowser, Disposable {
     public ChromiumBrowser() {
         browser = new JBCefBrowser();
         jsQuery = JBCefJSQuery.create(browser);
-        isReadyToExecuteJavaScript = !browser.getCefBrowser().isLoading();
+        isReadyToExecuteJavaScript = false;
         addLoadHandler();
     }
 
@@ -35,9 +35,14 @@ public class ChromiumBrowser implements IBrowser, Disposable {
     }
 
     protected void addLoadHandler(){
-        getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+        var browser = getBrowser();
+        var client = browser.getClient();
+        client.addLoadHandler(new CefLoadHandlerAdapter() {
             @Override
             public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+                if(!browser.hasDocument()){
+                    return;
+                }
                 isReadyToExecuteJavaScript = !isLoading;
                 if(!isLoading){
                     browser.getSource(new CefStringVisitor() {
@@ -55,10 +60,16 @@ public class ChromiumBrowser implements IBrowser, Disposable {
     }
 
     @Override
+    public boolean isJsReady(){
+        return isReadyToExecuteJavaScript;
+    }
+
+    @Override
     public synchronized void loadUrl(@NotNull final String url) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                isReadyToExecuteJavaScript = false;
                 browser.loadURL(url);
             }
         });
@@ -69,6 +80,7 @@ public class ChromiumBrowser implements IBrowser, Disposable {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                isReadyToExecuteJavaScript = false;
                 browser.loadURL("file:" + file.getAbsolutePath());
             }
         });
@@ -79,6 +91,7 @@ public class ChromiumBrowser implements IBrowser, Disposable {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                isReadyToExecuteJavaScript = false;
                 browser.loadHTML(content);
             }
         });

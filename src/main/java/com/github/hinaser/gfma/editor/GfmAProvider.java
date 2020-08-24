@@ -1,8 +1,8 @@
 package com.github.hinaser.gfma.editor;
 
-import com.intellij.ui.jcef.JBCefApp;
-import com.github.hinaser.gfma.markdown.MarkdownFile;
+import com.github.hinaser.gfma.helper.Util;
 import com.github.hinaser.gfma.GfmABundle;
+import com.intellij.ui.jcef.JBCefApp;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
@@ -23,8 +23,7 @@ public class GfmAProvider implements FileEditorProvider {
         catch(Exception e){
             return false;
         }
-        String extension = virtualFile.getExtension();
-        return MarkdownFile.isMarkdown(extension);
+        return Util.isMarkdownFile(virtualFile);
     }
 
     @NotNull
