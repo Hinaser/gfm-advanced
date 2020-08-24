@@ -3,7 +3,7 @@
 ## [Unreleased]
 ### Bug to be fixed
 - Noticed an issue where focus on editor lost after clicking scrollbar in preview panel.
-- Noticed an issue where GfmA panel not showing current markdown when markdown text edited before the panel opened.
+- Fixed an issue where GfmA panel not showing current markdown when markdown text edited before the panel opened.
 
 ## [0.0.2] - Jul 12, 2020
 ### Added
