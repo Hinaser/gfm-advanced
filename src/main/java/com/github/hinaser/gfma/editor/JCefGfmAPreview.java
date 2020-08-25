@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.github.hinaser.gfma.browser.ChromiumBrowser;
 import com.github.hinaser.gfma.browser.MarkdownParsedListener;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -15,7 +16,7 @@ public class JCefGfmAPreview extends AbstractGfmAPreview {
     private final IBrowser browser = new ChromiumBrowser();
     private final MarkdownParsedAdapter markdownParsedAdapter;
 
-    public JCefGfmAPreview(@NotNull VirtualFile markdownFile, @NotNull Document document){
+    public JCefGfmAPreview(@NotNull VirtualFile markdownFile, @Nullable Document document){
         super(markdownFile, document);
         this.markdownParsedAdapter = new MarkdownParsedAdapter(this.browser, markdownFile.getName());
         initialize();

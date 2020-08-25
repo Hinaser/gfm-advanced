@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.function.Function;
 
 public interface IBrowser extends Disposable {
+    boolean isJsReady();
+
     void loadUrl(@NotNull String url);
 
     void loadFile(@NotNull File file);

@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'org.jetbrains.changelog'
 
 group 'com.github.hinaser'
-version '0.0.2'
+version '0.0.3'
 
 repositories {
     mavenCentral()
@@ -20,9 +20,14 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
+// See https://jetbrains.org/intellij/sdk/docs/reference_guide/intellij_artifacts.html
+// Find target intellij version here
+//   - https://www.jetbrains.com/intellij-repository/snapshots/
+//   - https://www.jetbrains.com/intellij-repository/releases/
+// For debugging purpose, I recommend to also download correspond source file here.
+//   https://github.com/JetBrains/intellij-community/tags
 intellij {
-    version '202.6109.22-EAP-SNAPSHOT'
+    version '202.6397.94'
 }
 patchPluginXml {
     changeNotes({ changelog.getLatest().toHTML() })
