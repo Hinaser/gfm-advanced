@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.0.4] - Jan 13, 2020
+## [0.0.4] - Jan 13, 2021
 ### Added
 - Now compatible with IntelliJ 2020.3
 
