@@ -1,8 +1,11 @@
 # Changelog
 
-## [0.0.4] - Jan XX, 2020
+## [0.0.4] - Jan 13, 2020
 ### Added
 - Now compatible with IntelliJ 2020.3
+
+### Fixed
+- Fixed an issue where emoji was not rendered properly.
 
 ## [0.0.3] - Aug 25, 2020
 ### Fixed
