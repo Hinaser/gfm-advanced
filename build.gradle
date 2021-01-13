@@ -31,6 +31,8 @@ intellij {
 }
 patchPluginXml {
     changeNotes({ changelog.getLatest().toHTML() })
+    sinceBuild '202.6109'
+    untilBuild '203.*'
 }
 publishPlugin {
     token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
