@@ -7,6 +7,10 @@
 ### Fixed
 - Fixed an issue where emoji was not rendered properly.
 
+### Changed
+- Options of this plugin are not searchable in Settings dialog for now  
+  because of [this issue](https://youtrack.jetbrains.com/issue/KTIJ-782)
+
 ## [0.0.3] - Aug 25, 2020
 ### Fixed
 - Fixed an issue where GfmA panel not showing current markdown when markdown text edited before the panel opened.

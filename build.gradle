@@ -46,3 +46,7 @@ changelog {
     unreleasedTerm = "[Unreleased]"
     groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
 }
+
+buildSearchableOptions {
+    enabled = false
+}
