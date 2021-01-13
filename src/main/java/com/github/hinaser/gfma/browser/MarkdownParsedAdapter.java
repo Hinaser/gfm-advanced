@@ -63,9 +63,9 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                 String showActiveParser = settings.isShowActiveParser() ? "true" : "false";
                 String isFallbackToOfflineParser = settings.isFallingBackToOfflineParser() ? "true" : "false";
 
-                String escapedHtml = html
-                        .replaceAll("[\"]", "\\\\\"")
-                        .replaceAll("[\n]", "\\\\n");
+                // Escape emojis, quotations, new lines
+                // @See https://github.com/Hinaser/gfm-advanced/issues/5
+                String escapedHtml = getEscapedHtmlString(html);
 
                 String javascript = ""
                         + "window.reloadHtml = function(){\n"
@@ -93,6 +93,30 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
         catch(Exception e) {
             onMarkdownParseFailed(e.getLocalizedMessage(), ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    public String getEscapedHtmlString(String html){
+        html = html.replaceAll("\"", "\\\\\"").replaceAll("\n", "\\\\n");
+
+        StringBuilder escapedHtml = new StringBuilder();
+        for(int i=0; i<html.length(); i++){
+            int cp = html.codePointAt(i);
+
+            // Handle emoji or character represented by surrogate pair.
+            if(cp > 65535){
+                StringBuilder sb = new StringBuilder();
+                sb.append("&#");
+                sb.append(cp);
+                sb.append(";");
+                escapedHtml.append(sb);
+                i++; // It seems low surrogate value is included in `html.codePointAt(high_surrogate_index)`, so skip it.
+            }
+            else{
+                escapedHtml.appendCodePoint(cp);
+            }
+        }
+
+        return escapedHtml.toString();
     }
 
     @Override

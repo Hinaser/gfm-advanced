@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'org.jetbrains.changelog'
 
 group 'com.github.hinaser'
-version '0.0.3'
+version '0.0.4'
 
 repositories {
     mavenCentral()
@@ -27,10 +27,12 @@ dependencies {
 // For debugging purpose, I recommend to also download correspond source file here.
 //   https://github.com/JetBrains/intellij-community/tags
 intellij {
-    version '202.6397.94'
+    version '203.5981.155'
 }
 patchPluginXml {
     changeNotes({ changelog.getLatest().toHTML() })
+    sinceBuild '202.6109'
+    untilBuild '203.*'
 }
 publishPlugin {
     token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
@@ -45,4 +47,8 @@ changelog {
     keepUnreleasedSection = true
     unreleasedTerm = "[Unreleased]"
     groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
+}
+
+buildSearchableOptions {
+    enabled = false
 }
