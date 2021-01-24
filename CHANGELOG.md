@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.0.5] - Jan XX, 2021
+## [0.0.5] - Jan 24, 2021
 ### Fixed
 - Fixed typos. (Github -> GitHub)
 - Fixed wrong text at `use offilne parser` checkbox in settings.
