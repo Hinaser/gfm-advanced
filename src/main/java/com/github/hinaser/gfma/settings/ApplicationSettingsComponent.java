@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class ApplicationSettingsComponent implements Disposable {
     private JPanel panel;
-    private JCheckBox useGithubMarkdownAPICheckBox;
+    private JCheckBox useGitHubMarkdownAPICheckBox;
     private JPasswordField githubAccessTokenField;
     private JSpinner connectionTimeoutSpinner;
     private JSpinner socketTimeoutSpinner;
@@ -17,11 +17,11 @@ public class ApplicationSettingsComponent implements Disposable {
         return panel;
     }
 
-    public JCheckBox getUseGithubMarkdownAPICheckBox() {
-        return useGithubMarkdownAPICheckBox;
+    public JCheckBox getUseGitHubMarkdownAPICheckBox() {
+        return useGitHubMarkdownAPICheckBox;
     }
 
-    public JPasswordField getGithubAccessTokenField() {
+    public JPasswordField getGitHubAccessTokenField() {
         return githubAccessTokenField;
     }
 

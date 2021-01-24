@@ -6,13 +6,13 @@
     <idea-version since-build="202.6109" until-build="203.*" />
 
     <description><![CDATA[
-    <p>Yet another GitHub Flavored Markdown Preview plugin for intellij platform</p>
+    <p>Yet another GFM(GitHub Flavored Markdown) Preview plugin for intellij platform</p>
     <p style='margin-top: 8px;'>
       <b>Feature</b>
     </p>
     <ul>
       <li>
-        Preview markdown as github flavored markdown by<br/>
+        Preview markdown as GFM(GitHub Flavored Markdown) by<br/>
         <a href='https://developer.github.com/v3/markdown/'>GitHub Markdown API</a>.
       </li>
       <li>Using embedded Chromium browser (JCef) to display preview.</li>
