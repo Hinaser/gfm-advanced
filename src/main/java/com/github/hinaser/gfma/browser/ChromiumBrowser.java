@@ -2,7 +2,6 @@ package com.github.hinaser.gfma.browser;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.ui.jcef.JBCefBrowser;
-import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefJSQuery;
 import com.intellij.ui.jcef.JBCefJSQuery.Response;
 import org.cef.browser.CefBrowser;
@@ -26,7 +25,7 @@ public class ChromiumBrowser implements IBrowser, Disposable {
 
     public ChromiumBrowser() {
         browser = new JBCefBrowser();
-        jsQuery = JBCefJSQuery.create((JBCefBrowserBase)browser);
+        jsQuery = JBCefJSQuery.create(browser);
         isReadyToExecuteJavaScript = false;
         addLoadHandler();
     }
