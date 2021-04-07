@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.github.hinaser.gfma.browser.ChromiumBrowser;
 import com.github.hinaser.gfma.browser.MarkdownParsedListener;
+import com.intellij.util.DeprecatedMethodException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,5 +44,10 @@ public class JCefGfmAPreview extends AbstractGfmAPreview {
     @Override
     public @NotNull String getName() {
         return "GfmA Preview";
+    }
+
+    @Override
+    public @NotNull VirtualFile getFile() {
+        return markdownFile;
     }
 }
