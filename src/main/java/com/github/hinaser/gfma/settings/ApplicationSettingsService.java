@@ -18,7 +18,7 @@ import java.util.Set;
         storages = @Storage("gfma.xml")
 )
 public class ApplicationSettingsService implements PersistentStateComponent<Element> {
-    private static final String USE_GITHUB_MARKDOWN_API = "useGithubMarkdownAPI";
+    private static final String USE_GITHUB_MARKDOWN_API = "useGitHubMarkdownAPI";
     private static final String GITHUB_ACCESS_TOKEN = "githubAccessToken";
     private static final String CONNECTION_TIMEOUT = "connectionTimeout";
     private static final String SOCKET_TIMEOUT = "socketTimeout";
@@ -26,7 +26,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private static final String SHOW_ACTIVE_PARSER = "showActiveParser";
 
     private final Set<ApplicationSettingsChangedListener> listeners = new HashSet<ApplicationSettingsChangedListener>();
-    private boolean useGithubMarkdownAPI = true;
+    private boolean useGitHubMarkdownAPI = true;
     private String githubAccessToken = "";
     private int connectionTimeout = 2000;
     private int socketTimeout = 2000;
@@ -43,22 +43,22 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         return ServiceManager.getService(ApplicationSettingsService.class);
     }
 
-    public void setUseGithubMarkdownAPI(boolean useGithubMarkdownAPI) {
+    public void setUseGitHubMarkdownAPI(boolean useGitHubMarkdownAPI) {
         this.isFallingBackToOfflineParser = false;
 
-        if (this.useGithubMarkdownAPI != useGithubMarkdownAPI) {
-            this.useGithubMarkdownAPI = useGithubMarkdownAPI;
+        if (this.useGitHubMarkdownAPI != useGitHubMarkdownAPI) {
+            this.useGitHubMarkdownAPI = useGitHubMarkdownAPI;
             notifyListeners();
         }
     }
 
-    public boolean isUseGithubMarkdownAPI() {
-        return useGithubMarkdownAPI;
+    public boolean isUseGitHubMarkdownAPI() {
+        return useGitHubMarkdownAPI;
     }
 
     public void setFallbackToOfflineParser(){
-        if(this.useGithubMarkdownAPI){
-            this.useGithubMarkdownAPI = false;
+        if(this.useGitHubMarkdownAPI){
+            this.useGitHubMarkdownAPI = false;
             this.isFallingBackToOfflineParser = true;
             notifyListeners();
         }
@@ -68,11 +68,11 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         return isFallingBackToOfflineParser;
     }
 
-    public String getGithubAccessToken() {
+    public String getGitHubAccessToken() {
         return githubAccessToken;
     }
 
-    public void setGithubAccessToken(String githubAccessToken) {
+    public void setGitHubAccessToken(String githubAccessToken) {
         if (!this.githubAccessToken.equals(githubAccessToken)) {
             this.githubAccessToken = githubAccessToken;
             notifyListeners();
@@ -123,7 +123,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         }
     }
 
-    public boolean isGithubAccessTokenValid() {
+    public boolean isGitHubAccessTokenValid() {
         return isAccessTokenValid;
     }
 
@@ -150,7 +150,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     @Override
     public Element getState() {
         Element element = new Element("GfmASettings");
-        element.setAttribute(USE_GITHUB_MARKDOWN_API, String.valueOf(useGithubMarkdownAPI));
+        element.setAttribute(USE_GITHUB_MARKDOWN_API, String.valueOf(useGitHubMarkdownAPI));
         element.setAttribute(GITHUB_ACCESS_TOKEN, githubAccessToken);
         element.setAttribute(CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         element.setAttribute(SOCKET_TIMEOUT, String.valueOf(socketTimeout));
@@ -163,7 +163,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     public void loadState(Element state) {
         String githubAccessToken = state.getAttributeValue(GITHUB_ACCESS_TOKEN);
         if (githubAccessToken != null) {
-            setGithubAccessToken(githubAccessToken);
+            setGitHubAccessToken(githubAccessToken);
         }
         String connectionTimeout = state.getAttributeValue(CONNECTION_TIMEOUT);
         if (connectionTimeout != null) {
@@ -173,9 +173,9 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
         if (socketTimeout != null) {
             setSocketTimeout(Integer.parseInt(socketTimeout));
         }
-        String useGithubMarkdownAPI = state.getAttributeValue(USE_GITHUB_MARKDOWN_API);
-        if (useGithubMarkdownAPI != null) {
-            setUseGithubMarkdownAPI(Boolean.parseBoolean(useGithubMarkdownAPI));
+        String useGitHubMarkdownAPI = state.getAttributeValue(USE_GITHUB_MARKDOWN_API);
+        if (useGitHubMarkdownAPI != null) {
+            setUseGitHubMarkdownAPI(Boolean.parseBoolean(useGitHubMarkdownAPI));
         }
         String useFullWidthRendering = state.getAttributeValue(USE_FULL_WIDTH_RENDERING);
         if (useFullWidthRendering != null) {

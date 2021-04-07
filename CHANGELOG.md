@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.5] - Jan 24, 2021
+### Fixed
+- Fixed typos. (Github -> GitHub)
+- Fixed wrong text at `use offilne parser` checkbox in settings.
+
 ## [0.0.4] - Jan 13, 2021
 ### Added
 - Now compatible with IntelliJ 2020.3
@@ -21,6 +26,7 @@
 ### Fixed
 - Fixed an issue where offline parser did not properly parse and render some gfm syntax.
 
+[0.0.5]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.5
 [0.0.4]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.4
 [0.0.3]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.3
 [0.0.2]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.2

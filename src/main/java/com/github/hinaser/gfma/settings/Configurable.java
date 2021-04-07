@@ -53,8 +53,8 @@ public class Configurable implements SearchableConfigurable {
     public boolean isModified() {
         return appSettings.getConnectionTimeout() != (Integer)appSettingsComponent.getConnectionTimeoutSpinner().getValue() ||
                 appSettings.getSocketTimeout() != (Integer)appSettingsComponent.getSocketTimeoutSpinner().getValue() ||
-                !appSettings.getGithubAccessToken().equals(String.valueOf(appSettingsComponent.getGithubAccessTokenField().getPassword())) ||
-                appSettings.isUseGithubMarkdownAPI() != appSettingsComponent.getUseGithubMarkdownAPICheckBox().isSelected() ||
+                !appSettings.getGitHubAccessToken().equals(String.valueOf(appSettingsComponent.getGitHubAccessTokenField().getPassword())) ||
+                appSettings.isUseGitHubMarkdownAPI() != appSettingsComponent.getUseGitHubMarkdownAPICheckBox().isSelected() ||
                 appSettings.isUseFullWidthRendering() != appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected() ||
                 appSettings.isShowActiveParser() != appSettingsComponent.getShowActiveParserCheckBox().isSelected()
             ;
@@ -62,10 +62,10 @@ public class Configurable implements SearchableConfigurable {
 
     @Override
     public void apply() throws ConfigurationException {
-        appSettings.setGithubAccessToken(String.valueOf(appSettingsComponent.getGithubAccessTokenField().getPassword()));//todo not secure
+        appSettings.setGitHubAccessToken(String.valueOf(appSettingsComponent.getGitHubAccessTokenField().getPassword()));//todo not secure
         appSettings.setConnectionTimeout((Integer) appSettingsComponent.getConnectionTimeoutSpinner().getValue());
         appSettings.setSocketTimeout((Integer) appSettingsComponent.getSocketTimeoutSpinner().getValue());
-        appSettings.setUseGithubMarkdownAPI(appSettingsComponent.getUseGithubMarkdownAPICheckBox().isSelected());
+        appSettings.setUseGitHubMarkdownAPI(appSettingsComponent.getUseGitHubMarkdownAPICheckBox().isSelected());
         appSettings.setUseFullWidthRendering(appSettingsComponent.getUseFullWidthRenderingCheckBox().isSelected());
         appSettings.setShowActiveParser(appSettingsComponent.getShowActiveParserCheckBox().isSelected());
     }
@@ -78,10 +78,10 @@ public class Configurable implements SearchableConfigurable {
                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
                     @Override
                     public void run() {
-                        appSettingsComponent.getGithubAccessTokenField().setText(appSettings.getGithubAccessToken());
+                        appSettingsComponent.getGitHubAccessTokenField().setText(appSettings.getGitHubAccessToken());
                         appSettingsComponent.getConnectionTimeoutSpinner().setValue(appSettings.getConnectionTimeout());
                         appSettingsComponent.getSocketTimeoutSpinner().setValue(appSettings.getSocketTimeout());
-                        appSettingsComponent.getUseGithubMarkdownAPICheckBox().setSelected(appSettings.isUseGithubMarkdownAPI());
+                        appSettingsComponent.getUseGitHubMarkdownAPICheckBox().setSelected(appSettings.isUseGitHubMarkdownAPI());
                         appSettingsComponent.getUseFullWidthRenderingCheckBox().setSelected(appSettings.isUseFullWidthRendering());
                         appSettingsComponent.getShowActiveParserCheckBox().setSelected(appSettings.isShowActiveParser());
                     }

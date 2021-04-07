@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
+public class GitHubAPIMarkdownParser extends AbstractMarkdownParser {
     private static final Pattern IMG_PATTERN = Pattern.compile("!\\[([^]]*)]\\(([^)]+)\\)");
     private final CloseableHttpClient httpClient;
     private final ApplicationSettingsService appSettings;
@@ -31,7 +31,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
     protected boolean isInvalidToken = false;
     protected String lastUsedAccessToken = ""; // For detecting token updated. If invalid token is not updated, don't use it for API request.
 
-    protected GithubAPIMarkdownParser(String parentFolderPath, MarkdownParsedListener listener) {
+    protected GitHubAPIMarkdownParser(String parentFolderPath, MarkdownParsedListener listener) {
         super(listener);
         this.parentFolderPath = parentFolderPath;
         this.markdownParsedListener = listener;
@@ -39,8 +39,8 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
         this.appSettings = ApplicationSettingsService.getInstance();
     }
 
-    public static GithubAPIMarkdownParser getInstance(String parentFolderPath, MarkdownParsedListener listener){
-        return new GithubAPIMarkdownParser(parentFolderPath, listener);
+    public static GitHubAPIMarkdownParser getInstance(String parentFolderPath, MarkdownParsedListener listener){
+        return new GitHubAPIMarkdownParser(parentFolderPath, listener);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
             httpPost.setConfig(requestConfig);
 
             if(!noAccessToken){
-                String authToken = appSettings.getGithubAccessToken();
+                String authToken = appSettings.getGitHubAccessToken();
                 if(!authToken.isEmpty()){
                     httpPost.addHeader(HttpHeaders.AUTHORIZATION, "token " + authToken);
                 }
@@ -221,7 +221,7 @@ public class GithubAPIMarkdownParser extends AbstractMarkdownParser {
 
         @Override
         public void run() {
-            boolean isInvalidTokenStillUsed = isInvalidToken && appSettings.getGithubAccessToken().equals(lastUsedAccessToken);
+            boolean isInvalidTokenStillUsed = isInvalidToken && appSettings.getGitHubAccessToken().equals(lastUsedAccessToken);
             sendAPI(isInvalidTokenStillUsed);
         }
     }

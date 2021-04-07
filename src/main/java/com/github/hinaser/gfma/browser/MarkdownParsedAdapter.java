@@ -36,7 +36,7 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
             // Otherwise, set parsed markdown html via javascript for faster loading.
             if(!browser.isJsReady()) {
                 MarkdownTemplate template = MarkdownTemplate.getInstance();
-                String appliedHtml = template.getGithubFlavoredHtml(filename, html);
+                String appliedHtml = template.getGitHubFlavoredHtml(filename, html);
 
                 /*
                  * When load string html directly like below, non-ascii multi byte string will be converted to '?'(u+003F)
@@ -52,10 +52,10 @@ public class MarkdownParsedAdapter implements MarkdownParsedListener {
                 browser.loadFile(file);
             }
             else {
-                String parser = settings.isUseGithubMarkdownAPI() ? "Github Markdown API" : "Flexmark-java";
-                String accessTokenVerified = settings.getGithubAccessToken().isEmpty() ? "not-set"
-                        : settings.isGithubAccessTokenValid() ? "verified" : "invalid";
-                String rateLimit = !settings.isUseGithubMarkdownAPI() ? "" :
+                String parser = settings.isUseGitHubMarkdownAPI() ? "GitHub Markdown API" : "Flexmark-java";
+                String accessTokenVerified = settings.getGitHubAccessToken().isEmpty() ? "not-set"
+                        : settings.isGitHubAccessTokenValid() ? "verified" : "invalid";
+                String rateLimit = !settings.isUseGitHubMarkdownAPI() ? "" :
                         "X-RateLimit-Limit = " + settings.getRateLimitLimit().toString() + "\\n" +
                                 "X-RateLimit-Remaining = " + settings.getRateLimitRemaining().toString() + "\\n" +
                                 "X-RateLimit-Reset = " + settings.getRateLimitReset().toString()

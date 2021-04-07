@@ -33,18 +33,18 @@ public class MarkdownTemplate extends AbstractTemplate {
         final HashMap<String, Object> markdownParams = new HashMap<String, Object>();
         URL githubCss;
         URL githubCss2;
-        URL highlightGithubCss;
+        URL highlightGitHubCss;
         URL highlightMinJs;
 
         try {
             githubCss = new File(outputFile, FileUtil.join("css", "github-fff66249e57e12b5b264967f6a4d21f8923d59247f86c4419d1e3092660fe54b.css")).toURI().toURL();
             githubCss2 = new File(outputFile, FileUtil.join("css", "github2-ade0148a562b52311cf36a8e5f019126eb5ef7054bf2a0463ea00c536a358d33.css")).toURI().toURL();
-            highlightGithubCss = new File(outputFile, FileUtil.join("css", "highlightjs10_1_1", "github.css")).toURI().toURL();
+            highlightGitHubCss = new File(outputFile, FileUtil.join("css", "highlightjs10_1_1", "github.css")).toURI().toURL();
             highlightMinJs = new File(outputFile, FileUtil.join("css", "highlightjs10_1_1", "highlight.min.js")).toURI().toURL();
 
             markdownParams.put("github.css", githubCss.toExternalForm());
             markdownParams.put("github2.css", githubCss2.toExternalForm());
-            markdownParams.put("highlight.github.css", highlightGithubCss.toExternalForm());
+            markdownParams.put("highlight.github.css", highlightGitHubCss.toExternalForm());
             markdownParams.put("highlight.min.js", highlightMinJs.toExternalForm());
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -59,17 +59,17 @@ public class MarkdownTemplate extends AbstractTemplate {
         return Singleton.INSTANCE;
     }
 
-    public String getGithubFlavoredHtml(String filename, String markdownHtml) {
+    public String getGitHubFlavoredHtml(String filename, String markdownHtml) {
         Map<String, String> params = new HashMap<>();
         params.put("width", settings.isUseFullWidthRendering() ?  "100%" : "980px");
-        params.put("parser", settings.isUseGithubMarkdownAPI() ? "Github Markdown API" : "Flexmark-java");
-        if(!settings.getGithubAccessToken().isEmpty()){
-            params.put("verified", settings.isGithubAccessTokenValid() ? "verified" : "invalid");
+        params.put("parser", settings.isUseGitHubMarkdownAPI() ? "GitHub Markdown API" : "Flexmark-java");
+        if(!settings.getGitHubAccessToken().isEmpty()){
+            params.put("verified", settings.isGitHubAccessTokenValid() ? "verified" : "invalid");
         }
         else{
             params.put("verified", "not-set");
         }
-        if(settings.isUseGithubMarkdownAPI()){
+        if(settings.isUseGitHubMarkdownAPI()){
             String rateLimit =
                     "X-RateLimit-Limit = " + settings.getRateLimitLimit().toString() + "\n" +
                     "X-RateLimit-Remaining = " + settings.getRateLimitRemaining().toString() + "\n" +
