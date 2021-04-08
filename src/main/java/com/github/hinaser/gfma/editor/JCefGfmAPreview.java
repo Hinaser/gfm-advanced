@@ -44,4 +44,9 @@ public class JCefGfmAPreview extends AbstractGfmAPreview {
     public @NotNull String getName() {
         return "GfmA Preview";
     }
+
+    @Override
+    public @NotNull VirtualFile getFile() {
+        return markdownFile;
+    }
 }

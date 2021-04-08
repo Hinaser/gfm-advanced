@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6] - April 8, 2021
+### Fixed
+- Removed IDE's upper version limit  
+  \*Because of this limit, plugin users were always required to wait  
+  for plugin update. I'm really sorry about this.
+- Updated inner intellij plugin version
+- Improved stability
+
 ## [0.0.5] - Jan 24, 2021
 ### Fixed
 - Fixed typos. (Github -> GitHub)
@@ -26,7 +34,8 @@
 ### Fixed
 - Fixed an issue where offline parser did not properly parse and render some gfm syntax.
 
-[0.0.5]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.5
-[0.0.4]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.4
-[0.0.3]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.3
-[0.0.2]: https://github.com/Hinaser/gfm-advanced/releases/tag/v0.0.2
+[0.0.6]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.1...v0.0.2
