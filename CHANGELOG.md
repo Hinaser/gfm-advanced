@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.7] - April 9, 2021
+### Fixed
+- Fixed an issue where IDE version limitation was not correctly removed.
+- Fixed an issue where plugin option was not searchable.
+
 ## [0.0.6] - April 8, 2021
 ### Fixed
 - Removed IDE's upper version limit  
@@ -34,6 +39,7 @@
 ### Fixed
 - Fixed an issue where offline parser did not properly parse and render some gfm syntax.
 
+[0.0.7]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.3...v0.0.4

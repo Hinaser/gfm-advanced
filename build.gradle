@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'org.jetbrains.changelog'
 
 group 'com.github.hinaser'
-version '0.0.6'
+version '0.0.7'
 
 repositories {
     mavenCentral()
@@ -28,10 +28,10 @@ dependencies {
 //   https://github.com/JetBrains/intellij-community/tags
 intellij {
     version '211.6693.111'
+    updateSinceUntilBuild false
 }
 patchPluginXml {
     changeNotes({ changelog.getLatest().toHTML() })
-    sinceBuild '202.6109'
 }
 publishPlugin {
     token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
@@ -49,5 +49,5 @@ changelog {
 }
 
 buildSearchableOptions {
-    enabled = false
+    enabled = true
 }
