@@ -25,6 +25,8 @@ public class ChromiumBrowser implements IBrowser, Disposable {
 
     public ChromiumBrowser() {
         browser = new JBCefBrowser();
+        // To support older version, I intentionally use deprecated method here.
+        // If replaced to non-deprecated method, it eventually drops support on idea version <= 202.*.
         jsQuery = JBCefJSQuery.create(browser);
         isReadyToExecuteJavaScript = false;
         addLoadHandler();
