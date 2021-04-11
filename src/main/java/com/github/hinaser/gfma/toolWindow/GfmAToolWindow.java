@@ -38,6 +38,7 @@ public class GfmAToolWindow extends JPanel implements Disposable {
 
     private GfmAToolWindow() {
         this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
+        this.listenerId = EditorTabListenerManager.addListener(new TabSelectedListener());
 
         JPanel container = new JPanel(new BorderLayout());
         setLayout(new BorderLayout());
@@ -48,10 +49,15 @@ public class GfmAToolWindow extends JPanel implements Disposable {
          * In order to avoid that, here trying to defer browser instance initialization.
          */
         new Thread(() -> {
-            this.browser = new ChromiumBrowser();
-            this.markdownParsedAdapter = new MarkdownParsedAdapter(this.browser, "");
-            this.listenerId = EditorTabListenerManager.addListener(new TabSelectedListener());
-            container.add(browser.getComponent(), BorderLayout.CENTER);
+            try {
+                Thread.sleep(17);
+                this.browser = new ChromiumBrowser();
+                this.markdownParsedAdapter = new MarkdownParsedAdapter(this.browser, "");
+                container.add(browser.getComponent(), BorderLayout.CENTER);
+            }
+            catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
         }).start();
     }
 
