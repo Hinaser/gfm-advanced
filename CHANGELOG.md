@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.0.8]
+## [0.0.8] - April 11, 2021
 ### Fixed
-- Fixed an issue where it blocks IDE from booting.
+- Fixed an issue where IDE stops loading on startup.
 
 ## [0.0.7] - April 9, 2021
 ### Fixed
