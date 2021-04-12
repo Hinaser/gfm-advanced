@@ -24,10 +24,10 @@ public class GfmAToolWindow extends JPanel implements Disposable {
     private static GfmAToolWindow instance = null;
 
     private final ApplicationSettingsService appSettings = ApplicationSettingsService.getInstance();
-    private final IBrowser browser = new ChromiumBrowser();
-    private final ThrottlePoolExecutor rateLimiterForToolWindow = new ThrottlePoolExecutor(1000);;
-    private final MarkdownParsedAdapter markdownParsedAdapter;
-    private final String listenerId;
+    private IBrowser browser;
+    private final ThrottlePoolExecutor rateLimiterForToolWindow = new ThrottlePoolExecutor(1000);
+    private MarkdownParsedAdapter markdownParsedAdapter;
+    private String listenerId;
 
     public static GfmAToolWindow getInstance(){
         if(instance == null){
@@ -37,15 +37,28 @@ public class GfmAToolWindow extends JPanel implements Disposable {
     }
 
     private GfmAToolWindow() {
-        this.markdownParsedAdapter = new MarkdownParsedAdapter(this.browser, "");
+        this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
         this.listenerId = EditorTabListenerManager.addListener(new TabSelectedListener());
 
-        this.appSettings.addApplicationSettingsChangedListener(new SettingsChangeListener(), this);
-
         JPanel container = new JPanel(new BorderLayout());
-        container.add(browser.getComponent(), BorderLayout.CENTER);
         setLayout(new BorderLayout());
         add(container, BorderLayout.CENTER);
+
+        /*
+         * I found that on IDE's startup, `new ChromiumBrowser()` possibly blocks thread somehow.
+         * In order to avoid that, here trying to defer browser instance initialization.
+         */
+        new Thread(() -> {
+            try {
+                Thread.sleep(17);
+                this.browser = new ChromiumBrowser();
+                this.markdownParsedAdapter = new MarkdownParsedAdapter(this.browser, "");
+                container.add(browser.getComponent(), BorderLayout.CENTER);
+            }
+            catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
     }
 
     public void render(String markdown) {
