@@ -2,8 +2,8 @@
 
 ## [0.0.9]
 ### Changed
-- Set maximum compatible IDE version to 211.* for gfmA@0.0.x.  
-  After IDE version >= 212, the code base of this plugin is not compatible for IDE < 211.*.
+- Set maximum compatible IDE version to 211.*.  
+  The code base of this plugin will be incompatible after IDE version >= 212.
 
 ## [0.0.8] - April 11, 2021
 ### Fixed
