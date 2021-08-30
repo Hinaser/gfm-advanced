@@ -3,7 +3,7 @@
     <name>GfmA</name>
     <vendor email="rindo.hinase@gmail.com" url="https://github.com/Hinaser">Hinaser</vendor>
 
-    <idea-version since-build="202.6109" until-build="211.*" />
+    <idea-version since-build="211.6693.111" />
 
     <description><![CDATA[
     <p>Yet another GFM(GitHub Flavored Markdown) Preview plugin for intellij platform</p>

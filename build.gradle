@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'org.jetbrains.changelog'
 
 group 'com.github.hinaser'
-version '0.0.9'
+version '1.0.0'
 
 repositories {
     mavenCentral()

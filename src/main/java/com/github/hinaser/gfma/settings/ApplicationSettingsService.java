@@ -2,9 +2,9 @@ package com.github.hinaser.gfma.settings;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Disposer;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +40,7 @@ public class ApplicationSettingsService implements PersistentStateComponent<Elem
     private Date rateLimitReset = null;
 
     public static ApplicationSettingsService getInstance() {
-        return ServiceManager.getService(ApplicationSettingsService.class);
+        return ApplicationManager.getApplication().getService(ApplicationSettingsService.class);
     }
 
     public void setUseGitHubMarkdownAPI(boolean useGitHubMarkdownAPI) {
