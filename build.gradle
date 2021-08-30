@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'org.jetbrains.changelog'
 
 group 'com.github.hinaser'
-version '0.0.8'
+version '0.0.9'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,8 @@ dependencies {
 //   https://github.com/JetBrains/intellij-community/tags
 intellij {
     version '211.6693.111'
-    updateSinceUntilBuild false
+    // version '203.8084.24'
+    // version '202.8194.7'
 }
 patchPluginXml {
     changeNotes({ changelog.getLatest().toHTML() })
