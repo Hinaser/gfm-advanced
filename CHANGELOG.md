@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.9]
+### Changed
+- Set maximum compatible IDE version to 211.*.  
+  The code base of this plugin will be incompatible after IDE version >= 212.
+
 ## [0.0.8] - April 11, 2021
 ### Fixed
 - Fixed an issue where IDE stops loading on startup.
@@ -43,6 +48,7 @@
 ### Fixed
 - Fixed an issue where offline parser did not properly parse and render some gfm syntax.
 
+[0.0.9]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/Hinaser/gfm-advanced/compare/v0.0.5...v0.0.6
