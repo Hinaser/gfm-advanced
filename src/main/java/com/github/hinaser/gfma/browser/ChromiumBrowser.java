@@ -1,6 +1,7 @@
 package com.github.hinaser.gfma.browser;
 
 import com.intellij.openapi.Disposable;
+import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefJSQuery;
 import com.intellij.ui.jcef.JBCefJSQuery.Response;
@@ -25,9 +26,7 @@ public class ChromiumBrowser implements IBrowser, Disposable {
 
     public ChromiumBrowser() {
         browser = new JBCefBrowser();
-        // To support older version, I intentionally use deprecated method here.
-        // If replaced to non-deprecated method, it eventually drops support on idea version <= 202.*.
-        jsQuery = JBCefJSQuery.create(browser);
+        jsQuery = JBCefJSQuery.create((JBCefBrowserBase)browser);
         isReadyToExecuteJavaScript = false;
         addLoadHandler();
     }
